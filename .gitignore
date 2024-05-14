@@ -1,0 +1,32 @@
+# compiled output
+/dist
+/node_modules
+/build
+
+# Logs
+logs
+*.log
+pnpm-debug.log*
+
+# OS
+.DS_Store
+
+# IDE - VSCode
+.vscode/*
+
+# dotenv environment variable files
+.env*
+!.env.template
+
+# temp directory
+.temp
+.tmp
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Google
+.google
+
+# Docker data
+.data
