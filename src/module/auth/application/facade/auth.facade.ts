@@ -46,16 +46,7 @@ export class AuthFacade {
       throw new NotFoundException('회원정보가 존재하지 않습니다.');
     }
 
-    return Token.from({
-      accessToken: await this.tokenService.generate(
-        { userId: auth.userId },
-        false,
-      ),
-      refreshToken: await this.tokenService.generate(
-        { userId: auth.userId },
-        true,
-      ),
-    });
+    return this.tokenService.generate({ userId: auth.userId });
   }
 
   async signUp(req: SignUpReq): Promise<Token> {
@@ -85,31 +76,13 @@ export class AuthFacade {
       return auth;
     });
 
-    return Token.from({
-      accessToken: await this.tokenService.generate(
-        { userId: auth.userId },
-        false,
-      ),
-      refreshToken: await this.tokenService.generate(
-        { userId: auth.userId },
-        true,
-      ),
-    });
+    return this.tokenService.generate({ userId: auth.userId });
   }
 
   async reissue(req: ReissueReq): Promise<Token> {
     const result = await this.tokenService.parse(req.refreshToken);
-    if (result.payload && result.isRefresh) {
-      return Token.from({
-        accessToken: await this.tokenService.generate(
-          { userId: result?.payload?.userId },
-          false,
-        ),
-        refreshToken: await this.tokenService.generate(
-          { userId: result?.payload?.userId },
-          true,
-        ),
-      });
+    if (result.payload && result.type === 'refresh') {
+      return this.tokenService.generate(result.payload);
     }
 
     throw new BadRequestException('유요하지 않은 토큰입니다.');
