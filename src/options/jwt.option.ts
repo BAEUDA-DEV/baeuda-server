@@ -4,6 +4,7 @@ import { JwtModuleAsyncOptions } from '@nestjs/jwt';
 import { ConfigOptions } from '@/options/config.option';
 
 export const jwtModuleOptions: JwtModuleAsyncOptions = {
+  global: true,
   inject: [ConfigService],
   useFactory: (configService: ConfigService<ConfigOptions>) => {
     return {

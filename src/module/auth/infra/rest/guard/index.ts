@@ -8,3 +8,7 @@ export interface OAuthUserType {
   email: string;
   hasAuthentication: Promise<boolean>;
 }
+
+export interface AuthUserType {
+  userId: string;
+}

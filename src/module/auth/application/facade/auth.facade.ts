@@ -1,4 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { match } from 'ts-pattern';
 
 import { PrismaService } from '@/common/injectable/prisma.service';
@@ -39,10 +43,7 @@ export class AuthFacade {
     });
 
     if (!auth) {
-      throw new HttpException(
-        '회원정보가 존재하지 않습니다.',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new NotFoundException('회원정보가 존재하지 않습니다.');
     }
 
     return Token.from({
@@ -67,10 +68,7 @@ export class AuthFacade {
     if (
       await this.authService.findOne({ provider: req.provider, providerId })
     ) {
-      throw new HttpException(
-        '회원정보가 이미 존재합니다.',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new BadRequestException('회원정보가 이미 존재합니다.');
     }
 
     const auth = await this.prisma.$transaction(async (tx) => {
@@ -114,9 +112,6 @@ export class AuthFacade {
       });
     }
 
-    throw new HttpException(
-      '유요하지 않은 토큰입니다.',
-      HttpStatus.BAD_REQUEST,
-    );
+    throw new BadRequestException('유요하지 않은 토큰입니다.');
   }
 }

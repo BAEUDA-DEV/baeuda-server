@@ -3,7 +3,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { OAuthUserType } from '@/module/auth/infra/rest/guard';
 import { GoogleAuthGuard } from '@/module/auth/infra/rest/guard/google-auth.guard';
-import { OAuthUser } from '@/module/auth/infra/rest/guard/oauth-user.decoration';
+import { OAuthUser } from '@/module/auth/infra/rest/guard/oauth-user.decorator';
 
 import { AuthFacade } from '@/module/auth/application/facade/auth.facade';
 

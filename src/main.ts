@@ -24,8 +24,23 @@ const bootstrap = async () => {
         .setTitle('Baeuda')
         .setDescription('API description for Baeuda')
         .setVersion('0.0.1')
+        .addBearerAuth(
+          {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+            name: 'JWT',
+            in: 'header',
+          },
+          'authorization',
+        )
         .build(),
     ),
+    {
+      swaggerOptions: {
+        persistAuthorization: true,
+      },
+    },
   );
 
   await app.listen(3000);
