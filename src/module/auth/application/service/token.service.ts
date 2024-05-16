@@ -14,12 +14,13 @@ export class TokenService {
     private readonly jwtSerivce: JwtService,
   ) {}
 
-  async parse(
-    token: string,
-  ): Promise<{ payload: AuthUserType; type: 'access' | 'refresh' }> {
+  async parse(token: string): Promise<{
+    payload: AuthUserType | null;
+    type: 'access' | 'refresh' | null;
+  }> {
     try {
       return {
-        payload: await this.jwtSerivce.verifyAsync(token, {
+        payload: await this.jwtSerivce.verifyAsync<AuthUserType>(token, {
           secret: this.configService.get('JWT_SECRET'),
         }),
         type: 'access',
@@ -28,7 +29,7 @@ export class TokenService {
 
     try {
       return {
-        payload: await this.jwtSerivce.verifyAsync(token, {
+        payload: await this.jwtSerivce.verifyAsync<AuthUserType>(token, {
           secret: this.configService.get('JWT_REFRESH_SECRET'),
         }),
         type: 'refresh',

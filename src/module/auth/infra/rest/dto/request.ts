@@ -13,6 +13,18 @@ export class SignInReq {
   @IsNotEmpty()
   @IsString()
   providerAccessToken: string;
+
+  constructor(provider: OAuthProvider, providerAccessToken: string) {
+    this.provider = provider;
+    this.providerAccessToken = providerAccessToken;
+  }
+
+  static from(props: {
+    provider: OAuthProvider;
+    providerAccessToken: string;
+  }): SignInReq {
+    return new SignInReq(props.provider, props.providerAccessToken);
+  }
 }
 
 export class SignUpReq extends SignInReq {

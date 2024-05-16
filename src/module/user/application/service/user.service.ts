@@ -10,7 +10,7 @@ export class UserService {
   async findOne(
     where: Prisma.UserWhereInput,
     tx: Prisma.TransactionClient = this.prisma,
-  ): Promise<User> {
+  ): Promise<User | null> {
     return tx.user.findFirst({
       where,
     });

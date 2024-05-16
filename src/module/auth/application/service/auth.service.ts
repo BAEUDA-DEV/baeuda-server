@@ -11,7 +11,7 @@ export class AuthService {
     where: Prisma.AuthWhereInput,
     include?: Prisma.AuthInclude,
     tx: Prisma.TransactionClient = this.prisma,
-  ): Promise<Auth & { user?: User }> {
+  ): Promise<(Auth & { user?: User }) | null> {
     return tx.auth.findFirst({
       where,
       include,

@@ -5,7 +5,6 @@ export interface OAuthUserType {
   providerId: string;
   accessToken: string;
   refreshToken?: string;
-  email: string;
   hasAuthentication: Promise<boolean>;
 }
 

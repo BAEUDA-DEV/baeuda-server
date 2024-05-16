@@ -48,7 +48,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       providerId: profile.id,
       accessToken,
       refreshToken,
-      email: profile.emails[0].value,
       hasAuthentication,
     };
   }

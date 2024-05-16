@@ -1,5 +1,5 @@
 import { ConfigModuleOptions } from '@nestjs/config';
-import Joi from 'joi';
+import * as Joi from 'joi';
 
 export interface ConfigOptions {
   // Google OAuth
@@ -12,6 +12,9 @@ export interface ConfigOptions {
   JWT_REFRESH_SECRET: string;
   JWT_EXPIRE: string;
   JWT_REFRESH_EXPIRE: string;
+
+  // Database
+  DATABASE_URL: string;
 }
 
 const validationSchema = Joi.object({
@@ -23,6 +26,8 @@ const validationSchema = Joi.object({
   JWT_REFRESH_SECRET: Joi.string(),
   JWT_EXPIRE: Joi.string().optional().allow('').default('1h'),
   JWT_REFRESH_EXPIRE: Joi.string().optional().allow('').default('30d'),
+
+  DATABASE_URL: Joi.string(),
 });
 
 export const configModuleOptions: ConfigModuleOptions = {

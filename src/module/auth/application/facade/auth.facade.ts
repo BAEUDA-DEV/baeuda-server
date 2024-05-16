@@ -41,7 +41,6 @@ export class AuthFacade {
       provider: req.provider,
       providerId,
     });
-
     if (!auth) {
       throw new NotFoundException('회원정보가 존재하지 않습니다.');
     }
@@ -55,7 +54,6 @@ export class AuthFacade {
         this.googleSerivce.getUserId(req.providerAccessToken),
       )
       .exhaustive();
-
     if (
       await this.authService.findOne({ provider: req.provider, providerId })
     ) {
