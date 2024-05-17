@@ -37,6 +37,32 @@ export class SignUpReq extends SignInReq {
   @IsNotEmpty()
   @IsString()
   email: string;
+
+  constructor(
+    provider: OAuthProvider,
+    providerAccessToken: string,
+    name: string,
+    email: string,
+  ) {
+    super(provider, providerAccessToken);
+
+    this.name = name;
+    this.email = email;
+  }
+
+  static from(props: {
+    provider: OAuthProvider;
+    providerAccessToken: string;
+    name: string;
+    email: string;
+  }): SignUpReq {
+    return new SignUpReq(
+      props.provider,
+      props.providerAccessToken,
+      props.name,
+      props.email,
+    );
+  }
 }
 
 export class ReissueReq {

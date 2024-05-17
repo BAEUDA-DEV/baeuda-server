@@ -1,9 +1,13 @@
 import { HttpModule } from '@nestjs/axios';
-import { ExecutionContext, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ExecutionContext,
+  NotFoundException,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaClient, ProviderType } from '@prisma/client';
+import { Auth, PrismaClient, ProviderType, User } from '@prisma/client';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 
 import { PrismaService } from '@/common/injectable/prisma.service';
@@ -17,12 +21,12 @@ import { UserService } from '@/module/user/application/service/user.service';
 import { OAuthProvider } from '@/module/auth/domain/oauth';
 import { Token } from '@/module/auth/domain/token';
 
-import { SignInReq } from '@/module/auth/infra/rest/dto/request';
+import { SignInReq, SignUpReq } from '@/module/auth/infra/rest/dto/request';
 
 import { configModuleOptions } from '@/options/config.option';
 import { jwtModuleOptions } from '@/options/jwt.option';
 
-const auth = {
+const auth: Auth = {
   id: 'auth_id_01',
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -31,12 +35,12 @@ const auth = {
   userId: 'user_id_01',
 };
 
-const user = {
+const user: User = {
   id: 'user_id_01',
   createdAt: new Date(),
   updatedAt: new Date(),
   name: 'user_name_01',
-  email: 'user_email_01',
+  email: 'user_01@email.com',
 };
 
 describe('AuthFacade Test', () => {
@@ -105,7 +109,7 @@ describe('AuthFacade Test', () => {
         async (accessToken: string) => `google_user_id___${accessToken}`,
       );
 
-    expect(
+    await expect(
       async () =>
         await authFacade.signIn(
           SignInReq.from({
@@ -114,5 +118,48 @@ describe('AuthFacade Test', () => {
           }),
         ),
     ).rejects.toThrow(NotFoundException);
+  });
+
+  it('회원정보가 없다면, 회원가입에 성공해야 한다.', async () => {
+    prisma.$transaction.mockResolvedValue(auth);
+
+    jest
+      .spyOn(googleService, 'getUserId')
+      .mockImplementation(
+        async (accessToken: string) => `google_user_id___${accessToken}`,
+      );
+
+    const token = await authFacade.signUp(
+      SignUpReq.from({
+        provider: OAuthProvider.GOOGLE,
+        providerAccessToken: 'GoogleAccessToken',
+        name: 'user_name_01',
+        email: 'user_01@email.com',
+      }),
+    );
+
+    expect(token).toBeInstanceOf(Token);
+  });
+
+  it('회원정보가 있다면, 회원가입에 실패해야 한다.', async () => {
+    prisma.auth.findFirst.mockResolvedValue(auth);
+
+    jest
+      .spyOn(googleService, 'getUserId')
+      .mockImplementation(
+        async (accessToken: string) => `google_user_id___${accessToken}`,
+      );
+
+    await expect(
+      async () =>
+        await authFacade.signUp(
+          SignUpReq.from({
+            provider: OAuthProvider.GOOGLE,
+            providerAccessToken: 'GoogleAccessToken',
+            name: 'user_name_01',
+            email: 'user_01@email.com',
+          }),
+        ),
+    ).rejects.toThrow(BadRequestException);
   });
 });

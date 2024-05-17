@@ -66,12 +66,10 @@ export class AuthFacade {
         tx,
       );
 
-      const auth = await this.authService.create(
+      return this.authService.create(
         { provider: req.provider, providerId, userId: user.id },
         tx,
       );
-
-      return auth;
     });
 
     return this.tokenService.generate({ userId: auth.userId });
