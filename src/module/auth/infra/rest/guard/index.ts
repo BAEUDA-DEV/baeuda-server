@@ -1,11 +1,10 @@
 import { OAuthProvider } from '@/module/auth/domain/oauth';
 
-export interface OAuthUserType {
+export interface OAuthType {
   provider: OAuthProvider;
   providerId: string;
-  accessToken: string;
-  refreshToken?: string;
-  hasAuthentication: Promise<boolean>;
+  name: string | null;
+  email: string | null;
 }
 
 export interface AuthUserType {

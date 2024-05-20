@@ -7,25 +7,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ProviderType {
+  GOOGLE
+}
+
 model Auth {
   id         String       @id @default(uuid())
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
   provider   ProviderType @default(GOOGLE)
-  providerId String       @unique
+  providerId String       @unique @map("provider_id")
   user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String       @unique
+  userId     String       @unique @map("user_id")
+
+  @@index([providerId])
+  @@map("auth")
 }
 
 model User {
   id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
   name      String
   email     String   @unique
   Auth      Auth?
-}
 
-enum ProviderType {
-  GOOGLE
+  @@map("user")
 }

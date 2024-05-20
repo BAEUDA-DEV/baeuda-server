@@ -6,7 +6,6 @@ import { UserModule } from '@/module/user/user.module';
 
 import { AuthFacade } from '@/module/auth/application/facade/auth.facade';
 import { AuthService } from '@/module/auth/application/service/auth.service';
-import { GoogleService } from '@/module/auth/application/service/google.service';
 import { TokenService } from '@/module/auth/application/service/token.service';
 import { AuthController } from '@/module/auth/infra/rest/auth.controller';
 import { GoogleStrategy } from '@/module/auth/infra/rest/guard/google.strategy';
@@ -25,7 +24,6 @@ import { jwtModuleOptions } from '@/options/jwt.option';
     GoogleStrategy,
     AuthFacade,
     AuthService,
-    GoogleService,
     TokenService,
     UserService,
   ],
