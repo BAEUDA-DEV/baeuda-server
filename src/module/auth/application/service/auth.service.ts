@@ -8,14 +8,12 @@ export class AuthService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findOne(
-    params: {
-      provider: ProviderType;
-      providerId: string;
-    },
+    where: Prisma.AuthWhereInput,
     include?: Prisma.AuthInclude,
-  ): Promise<Auth & { user?: User }> {
-    return this.prisma.auth.findFirst({
-      where: params,
+    tx: Prisma.TransactionClient = this.prisma,
+  ): Promise<(Auth & { user?: User }) | null> {
+    return tx.auth.findFirst({
+      where,
       include,
     });
   }

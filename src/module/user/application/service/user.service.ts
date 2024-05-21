@@ -7,6 +7,15 @@ import { PrismaService } from '@/common/injectable/prisma.service';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async findOne(
+    where: Prisma.UserWhereInput,
+    tx: Prisma.TransactionClient = this.prisma,
+  ): Promise<User | null> {
+    return tx.user.findFirst({
+      where,
+    });
+  }
+
   async create(
     params: { name: string; email: string },
     tx: Prisma.TransactionClient = this.prisma,
