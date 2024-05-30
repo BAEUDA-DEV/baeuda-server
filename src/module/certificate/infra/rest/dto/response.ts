@@ -1,18 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
 
 interface ICertificateRes {
   id: string;
   createdAt: Date;
   updatedAt: Date;
-  code: string;
   name: string;
-  round: number;
-  registrationStartDate: Date;
-  registrationEndDate: Date;
-  testStartDate: Date;
-  testEndDate: Date;
-  passDate: Date;
+}
+
+interface ICertificateRoundRes {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  certificate: CertificateRes;
+  year: number;
+  step: number;
+  registrationStart: Date;
+  registrationEnd: Date;
+  testStart: Date;
+  testEnd: Date;
+  resultAnnouncement: Date;
 }
 
 export class CertificateRes implements ICertificateRes {
@@ -32,61 +40,13 @@ export class CertificateRes implements ICertificateRes {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  code: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
   name: string;
 
-  @ApiProperty()
-  @IsNumber()
-  round: number;
-
-  @ApiProperty()
-  @IsDate()
-  registrationStartDate: Date;
-
-  @ApiProperty()
-  @IsDate()
-  registrationEndDate: Date;
-
-  @ApiProperty()
-  @IsDate()
-  testStartDate: Date;
-
-  @ApiProperty()
-  @IsDate()
-  testEndDate: Date;
-
-  @ApiProperty()
-  @IsDate()
-  passDate: Date;
-
-  constructor(
-    id: string,
-    createdAt: Date,
-    updatedAt: Date,
-    code: string,
-    name: string,
-    round: number,
-    registrationStartDate: Date,
-    registrationEndDate: Date,
-    testStartDate: Date,
-    testEndDate: Date,
-    passDate: Date,
-  ) {
+  constructor(id: string, createdAt: Date, updatedAt: Date, name: string) {
     this.id = id;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-    this.code = code;
     this.name = name;
-    this.round = round;
-    this.registrationStartDate = registrationStartDate;
-    this.registrationEndDate = registrationEndDate;
-    this.testStartDate = testStartDate;
-    this.testEndDate = testEndDate;
-    this.passDate = passDate;
   }
 
   static from(props: ICertificateRes): CertificateRes {
@@ -94,14 +54,96 @@ export class CertificateRes implements ICertificateRes {
       props.id,
       props.createdAt,
       props.updatedAt,
-      props.code,
       props.name,
-      props.round,
-      props.registrationStartDate,
-      props.registrationEndDate,
-      props.testStartDate,
-      props.testEndDate,
-      props.passDate,
+    );
+  }
+}
+
+export class CertificateRoundRes implements ICertificateRoundRes {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  id: string;
+
+  @ApiProperty()
+  @IsDate()
+  createdAt: Date;
+
+  @ApiProperty()
+  @IsDate()
+  updatedAt: Date;
+
+  @ApiProperty()
+  @Type(() => CertificateRoundRes)
+  certificate: CertificateRes;
+
+  @ApiProperty()
+  @IsNumber()
+  year: number;
+
+  @ApiProperty()
+  @IsNumber()
+  step: number;
+
+  @ApiProperty()
+  @IsDate()
+  registrationStart: Date;
+
+  @ApiProperty()
+  @IsDate()
+  registrationEnd: Date;
+
+  @ApiProperty()
+  @IsDate()
+  testStart: Date;
+
+  @ApiProperty()
+  @IsDate()
+  testEnd: Date;
+
+  @ApiProperty()
+  @IsDate()
+  resultAnnouncement: Date;
+
+  constructor(
+    id: string,
+    createdAt: Date,
+    updatedAt: Date,
+    certificate: CertificateRes,
+    year: number,
+    step: number,
+    registrationStart: Date,
+    registrationEnd: Date,
+    testStart: Date,
+    testEnd: Date,
+    resultAnnouncement: Date,
+  ) {
+    this.id = id;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.certificate = certificate;
+    this.year = year;
+    this.step = step;
+    this.registrationStart = registrationStart;
+    this.registrationEnd = registrationEnd;
+    this.testStart = testStart;
+    this.testEnd = testEnd;
+    this.resultAnnouncement = resultAnnouncement;
+  }
+
+  public static from(props: ICertificateRoundRes): CertificateRoundRes {
+    return new CertificateRoundRes(
+      props.id,
+      props.createdAt,
+      props.updatedAt,
+      CertificateRes.from(props.certificate),
+      props.year,
+      props.step,
+      props.registrationStart,
+      props.registrationEnd,
+      props.testStart,
+      props.testEnd,
+      props.resultAnnouncement,
     );
   }
 }

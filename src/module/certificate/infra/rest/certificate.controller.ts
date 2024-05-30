@@ -1,11 +1,14 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { UseAuth } from '@/module/auth/infra/rest/guard/use-auth.decorator';
 
 import { PaginationRes } from '@/common/dto/pagination.response';
 import { FindAllCertificateReq } from '@/module/certificate/infra/rest/dto/request';
-import { CertificateRes } from '@/module/certificate/infra/rest/dto/response';
+import {
+  CertificateRes,
+  CertificateRoundRes,
+} from '@/module/certificate/infra/rest/dto/response';
 
 import { CertificateFacade } from '@/module/certificate/application/facade/certificate.facade';
 
@@ -28,5 +31,16 @@ export class CertificateController {
           data.map((child) => child.toRes()),
         ),
       );
+  }
+
+  @Get('/:certificateId/round/list')
+  @ApiOperation({ summary: '자격증 일정 조회' })
+  @ApiResponse({ type: [CertificateRoundRes] })
+  async findRoundsByCertificateId(
+    @Param('certificateId') certificateId: string,
+  ): Promise<CertificateRoundRes[]> {
+    return this.certificateFacade
+      .findRoundByCertificateId(certificateId)
+      .then((rounds) => rounds.map((round) => round.toRes()));
   }
 }
