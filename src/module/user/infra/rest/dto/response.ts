@@ -49,7 +49,7 @@ export class UserRes implements IUserRes {
     this.email = email;
   }
 
-  static from(props: IUserRes): UserRes {
+  public static from(props: IUserRes): UserRes {
     return new UserRes(
       props.id,
       props.createdAt,

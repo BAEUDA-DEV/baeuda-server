@@ -10,7 +10,7 @@ const bootstrap = async () => {
   /**
    * Global validation pipe
    */
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   /**
    * OAS(Open API Spec)
