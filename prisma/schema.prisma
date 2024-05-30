@@ -32,7 +32,7 @@ model User {
   email           String            @unique
   profileImageUrl String?           @map("profile_image_url")
   auth            Auth?
-  userCertificate UserCertificate[]
+  certificates    CertificateUser[]
   comments        Comment[]
 
   @@map("user")
@@ -44,7 +44,7 @@ model Certificate {
   updatedAt                  DateTime                    @updatedAt @map("updated_at")
   code                       String                      @unique
   name                       String                      @unique
-  certificateRound           CertificateRound[]
+  rounds                     CertificateRound[]
   quiz                       Quiz[]
   armySpecialityCertificates ArmySpecialityCertificate[]
 
@@ -52,7 +52,7 @@ model Certificate {
   @@map("certificate")
 }
 
-model UserCertificate {
+model CertificateUser {
   id                 String           @id @default(uuid())
   createdAt          DateTime         @default(now()) @map("created_at")
   updatedAt          DateTime         @updatedAt @map("updated_at")
@@ -61,7 +61,7 @@ model UserCertificate {
   certificateRound   CertificateRound @relation(fields: [certificateRoundId], references: [id], onDelete: Cascade)
   certificateRoundId String           @map("certificate_round_id")
 
-  @@map("user_certificate")
+  @@map("certificate_user")
 }
 
 model CertificateRound {
@@ -77,7 +77,7 @@ model CertificateRound {
   testStart          DateTime          @map("test_start")
   testEnd            DateTime          @map("test_end")
   resultAnnouncement DateTime          @map("result_announcement")
-  userCertificate    UserCertificate[]
+  users              CertificateUser[]
 
   @@map("certificate_round")
 }

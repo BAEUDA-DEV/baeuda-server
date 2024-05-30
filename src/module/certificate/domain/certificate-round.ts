@@ -4,13 +4,17 @@ import {
 } from '@prisma/client';
 
 import { Certificate } from '@/module/certificate/domain/certificate';
-import { CertificateRoundRes } from '@/module/certificate/infra/rest/dto/response';
+
+import {
+  CertificateRes,
+  CertificateRoundRes,
+} from '@/module/certificate/infra/rest/dto/response';
 
 interface ICertificateRound {
   id: string;
   createdAt: Date;
   updatedAt: Date;
-  certificate: Certificate;
+  certificate: Certificate | null;
   certificateId: string;
   year: number;
   step: number;
@@ -25,7 +29,7 @@ export class CertificateRound implements ICertificateRound {
   id: string;
   createdAt: Date;
   updatedAt: Date;
-  certificate: Certificate;
+  certificate: Certificate | null;
   certificateId: string;
   year: number;
   step: number;
@@ -39,7 +43,7 @@ export class CertificateRound implements ICertificateRound {
     id: string,
     createdAt: Date,
     updatedAt: Date,
-    certificate: Certificate,
+    certificate: Certificate | null,
     certificateId: string,
     year: number,
     step: number,
@@ -64,13 +68,13 @@ export class CertificateRound implements ICertificateRound {
   }
 
   public static fromPrisma(
-    props: PrismaCertificateRound & { certificate: PrismaCertificate },
+    props: PrismaCertificateRound & { certificate?: PrismaCertificate },
   ): CertificateRound {
     return new CertificateRound(
       props.id,
       props.createdAt,
       props.updatedAt,
-      Certificate.fromPrisma(props.certificate),
+      props.certificate ? Certificate.fromPrisma(props.certificate) : null,
       props.certificateId,
       props.year,
       props.step,
@@ -83,6 +87,20 @@ export class CertificateRound implements ICertificateRound {
   }
 
   public toRes(): CertificateRoundRes {
-    return CertificateRoundRes.from(this);
+    return CertificateRoundRes.from({
+      id: this.id,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      certificate: this.certificate
+        ? CertificateRes.from(this.certificate)
+        : null,
+      year: this.year,
+      step: this.step,
+      registrationStart: this.registrationStart,
+      registrationEnd: this.registrationEnd,
+      testStart: this.testStart,
+      testEnd: this.testEnd,
+      resultAnnouncement: this.resultAnnouncement,
+    });
   }
 }

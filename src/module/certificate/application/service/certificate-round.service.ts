@@ -7,12 +7,12 @@ import { PrismaService } from '@/common/injectable/prisma.service';
 export class CertificateRoundService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findByCertificateId(
+  async findAll(
     where: Prisma.CertificateRoundWhereInput,
     tx: Prisma.TransactionClient = this.prisma,
   ): Promise<(CertificateRound & { certificate: Certificate })[]> {
     return tx.certificateRound.findMany({
-      where: where,
+      where,
       include: { certificate: true },
     });
   }

@@ -2,6 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
+import { UserRes } from '@/module/user/infra/rest/dto/response';
+
 interface ICertificateRes {
   id: string;
   createdAt: Date;
@@ -13,7 +15,7 @@ interface ICertificateRoundRes {
   id: string;
   createdAt: Date;
   updatedAt: Date;
-  certificate: CertificateRes;
+  certificate: CertificateRes | null;
   year: number;
   step: number;
   registrationStart: Date;
@@ -21,6 +23,14 @@ interface ICertificateRoundRes {
   testStart: Date;
   testEnd: Date;
   resultAnnouncement: Date;
+}
+
+interface ICertificateUserRes {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  certificateRound: CertificateRoundRes;
+  user: UserRes;
 }
 
 export class CertificateRes implements ICertificateRes {
@@ -73,9 +83,9 @@ export class CertificateRoundRes implements ICertificateRoundRes {
   @IsDate()
   updatedAt: Date;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Type(() => CertificateRoundRes)
-  certificate: CertificateRes;
+  certificate: CertificateRes | null;
 
   @ApiProperty()
   @IsNumber()
@@ -109,7 +119,7 @@ export class CertificateRoundRes implements ICertificateRoundRes {
     id: string,
     createdAt: Date,
     updatedAt: Date,
-    certificate: CertificateRes,
+    certificate: CertificateRes | null,
     year: number,
     step: number,
     registrationStart: Date,
@@ -136,7 +146,7 @@ export class CertificateRoundRes implements ICertificateRoundRes {
       props.id,
       props.createdAt,
       props.updatedAt,
-      CertificateRes.from(props.certificate),
+      props.certificate,
       props.year,
       props.step,
       props.registrationStart,
@@ -144,6 +154,53 @@ export class CertificateRoundRes implements ICertificateRoundRes {
       props.testStart,
       props.testEnd,
       props.resultAnnouncement,
+    );
+  }
+}
+
+export class CertificateUserRes implements ICertificateUserRes {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  id: string;
+
+  @ApiProperty()
+  @IsDate()
+  createdAt: Date;
+
+  @ApiProperty()
+  @IsDate()
+  updatedAt: Date;
+
+  @ApiProperty()
+  @Type(() => CertificateRoundRes)
+  certificateRound: CertificateRoundRes;
+
+  @ApiProperty()
+  @Type(() => UserRes)
+  user: UserRes;
+
+  constructor(
+    id: string,
+    createdAt: Date,
+    updatedAt: Date,
+    certificateRound: CertificateRoundRes,
+    user: UserRes,
+  ) {
+    this.id = id;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.certificateRound = certificateRound;
+    this.user = user;
+  }
+
+  public static from(props: ICertificateUserRes): CertificateUserRes {
+    return new CertificateUserRes(
+      props.id,
+      props.createdAt,
+      props.updatedAt,
+      props.certificateRound,
+      props.user,
     );
   }
 }
