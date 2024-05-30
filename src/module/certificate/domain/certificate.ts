@@ -46,7 +46,6 @@ export class Certificate implements ICertificate {
       id: this.id,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      code: this.code,
       name: this.name,
     });
   }
