@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Certificate, Prisma, Test } from '@prisma/client';
+import { Certificate, Prisma, Quiz } from '@prisma/client';
 
 import { PrismaService } from '@/common/injectable/prisma.service';
 
@@ -22,7 +22,7 @@ export class CertificateService {
     take?: number,
     include?: Prisma.CertificateInclude,
     tx: Prisma.TransactionClient = this.prisma,
-  ): Promise<(Certificate & { test?: Test })[]> {
+  ): Promise<(Certificate & { quiz?: Quiz })[]> {
     return tx.certificate.findMany({
       where,
       skip,
