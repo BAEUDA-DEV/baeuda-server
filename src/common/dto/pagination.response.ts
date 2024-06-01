@@ -1,5 +1,31 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { applyDecorators, Type } from '@nestjs/common';
+import {
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiProperty,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { IsBoolean, IsNumber } from 'class-validator';
+
+export const ApiPaginationResponse = <T extends Type<unknown>>(data: T) =>
+  applyDecorators(
+    ApiExtraModels(PaginationRes, data),
+    ApiOkResponse({
+      schema: {
+        allOf: [
+          { $ref: getSchemaPath(PaginationRes) },
+          {
+            properties: {
+              data: {
+                type: 'array',
+                items: { $ref: getSchemaPath(data) },
+              },
+            },
+          },
+        ],
+      },
+    }),
+  );
 
 interface IPaginationRes<T> {
   total: number;

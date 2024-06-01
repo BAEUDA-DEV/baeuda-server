@@ -5,7 +5,10 @@ import { AuthUserType } from '@/module/auth/infra/rest/guard';
 import { AuthUser } from '@/module/auth/infra/rest/guard/auth-user.decorator';
 import { UseAuth } from '@/module/auth/infra/rest/guard/use-auth.decorator';
 
-import { PaginationRes } from '@/common/dto/pagination.response';
+import {
+  ApiPaginationResponse,
+  PaginationRes,
+} from '@/common/dto/pagination.response';
 import { CertificateFacade } from '@/module/certificate/application/facade/certificate.facade';
 import {
   FindAllCertificateReq,
@@ -25,7 +28,7 @@ export class CertificateController {
 
   @Get('/list')
   @ApiOperation({ summary: '자격증 목록 조회' })
-  @ApiResponse({ type: PaginationRes<CertificateRes[]> })
+  @ApiPaginationResponse(CertificateRes)
   async findAll(
     @Query() req: FindAllCertificateReq,
   ): Promise<PaginationRes<CertificateRes[]>> {
@@ -52,7 +55,7 @@ export class CertificateController {
 
   @Get('/registered')
   @ApiOperation({ summary: '관심 등록된 자격증 목록 조회' })
-  @ApiResponse({ type: PaginationRes<CertificateUserRes[]> })
+  @ApiPaginationResponse(CertificateRes)
   async findRegisteredCertificate(
     @AuthUser() { userId }: AuthUserType,
     @Query() req: FindAllRegisteredCertificateReq,
