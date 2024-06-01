@@ -25,12 +25,115 @@ model Auth {
 }
 
 model User {
+  id              String            @id @default(uuid())
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+  name            String
+  email           String            @unique
+  profileImageUrl String?           @map("profile_image_url")
+  auth            Auth?
+  certificates    CertificateUser[]
+  comments        Comment[]
+
+  @@map("user")
+}
+
+model Certificate {
+  id                         String                      @id @default(uuid())
+  createdAt                  DateTime                    @default(now()) @map("created_at")
+  updatedAt                  DateTime                    @updatedAt @map("updated_at")
+  code                       String                      @unique
+  name                       String                      @unique
+  rounds                     CertificateRound[]
+  quiz                       Quiz[]
+  armySpecialityCertificates ArmySpecialityCertificate[]
+
+  @@index([code])
+  @@map("certificate")
+}
+
+model CertificateUser {
+  id                 String           @id @default(uuid())
+  createdAt          DateTime         @default(now()) @map("created_at")
+  updatedAt          DateTime         @updatedAt @map("updated_at")
+  user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId             String           @map("user_id")
+  certificateRound   CertificateRound @relation(fields: [certificateRoundId], references: [id], onDelete: Cascade)
+  certificateRoundId String           @map("certificate_round_id")
+
+  @@map("certificate_user")
+}
+
+model CertificateRound {
+  id                 String            @id @default(uuid())
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
+  certificate        Certificate       @relation(fields: [certificateId], references: [id], onDelete: Cascade)
+  certificateId      String            @map("certificate_id")
+  year               Int
+  step               Int
+  registrationStart  DateTime          @map("registrantion_start")
+  registrationEnd    DateTime          @map("registration_end")
+  testStart          DateTime          @map("test_start")
+  testEnd            DateTime          @map("test_end")
+  resultAnnouncement DateTime          @map("result_announcement")
+  users              CertificateUser[]
+
+  @@map("certificate_round")
+}
+
+model ArmySpeciality {
+  id                         String                      @id @default(uuid())
+  createdAt                  DateTime                    @default(now()) @map("created_at")
+  updatedAt                  DateTime                    @updatedAt @map("updated_at")
+  name                       String
+  description                String
+  armySpecialityCertificates ArmySpecialityCertificate[]
+
+  @@map("army_speciality")
+}
+
+model ArmySpecialityCertificate {
+  id               String         @id @default(uuid())
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+  armySpeciality   ArmySpeciality @relation(fields: [armySpecialityId], references: [id], onDelete: Cascade)
+  armySpecialityId String         @map("army_speciality_id")
+  certificate      Certificate    @relation(fields: [certificateId], references: [id], onDelete: Cascade)
+  certificateId    String         @map("certificate_id")
+
+  @@map("army_speciality_certificate")
+}
+
+model Quiz {
+  id            String      @id @default(uuid())
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+  certificate   Certificate @relation(fields: [certificateId], references: [id], onDelete: Cascade)
+  certificateId String      @map("certificate_id")
+  question      String
+  answers       Answer[]
+
+  @@map("quiz")
+}
+
+model Answer {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  name      String
-  email     String   @unique
-  Auth      Auth?
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId    String   @map("quid_id")
 
-  @@map("user")
+  @@map("answer")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  writer    User     @relation(fields: [writerId], references: [id], onDelete: Cascade)
+  writerId  String
+  content   String
+
+  @@map("comment")
 }

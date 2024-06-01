@@ -22,7 +22,7 @@ export class AuthRes implements IAuthRes {
     this.refreshToken = refreshToken;
   }
 
-  static from(props: IAuthRes): AuthRes {
+  public static from(props: IAuthRes): AuthRes {
     return new AuthRes(props.accessToken, props.refreshToken);
   }
 }

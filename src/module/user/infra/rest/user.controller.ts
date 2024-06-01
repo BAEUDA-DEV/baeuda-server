@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { UseAuth } from '@/module/auth/infra/rest/guard/use-auth.decorator';
 import { UserFacade } from '@/module/user/application/facade/user.facade';
@@ -16,6 +16,7 @@ export class UserController {
   constructor(private readonly userFacade: UserFacade) {}
 
   @Get('/me')
+  @ApiOperation({ summary: '내 정보 조회' })
   @ApiResponse({ type: UserRes })
   async me(@AuthUser() { userId }: AuthUserType): Promise<UserRes> {
     return this.userFacade.me(userId).then((it) => it.toRes());
