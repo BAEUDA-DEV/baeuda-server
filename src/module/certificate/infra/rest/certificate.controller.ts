@@ -1,11 +1,12 @@
 import { Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { UseAuth } from '@/module/auth/infra/rest/guard/use-auth.decorator';
-import { AuthUser } from '@/module/auth/infra/rest/guard/auth-user.decorator';
 import { AuthUserType } from '@/module/auth/infra/rest/guard';
+import { AuthUser } from '@/module/auth/infra/rest/guard/auth-user.decorator';
+import { UseAuth } from '@/module/auth/infra/rest/guard/use-auth.decorator';
 
 import { PaginationRes } from '@/common/dto/pagination.response';
+import { CertificateFacade } from '@/module/certificate/application/facade/certificate.facade';
 import {
   FindAllCertificateReq,
   FindAllRegisteredCertificateReq,
@@ -15,7 +16,6 @@ import {
   CertificateRoundRes,
   CertificateUserRes,
 } from '@/module/certificate/infra/rest/dto/response';
-import { CertificateFacade } from '@/module/certificate/application/facade/certificate.facade';
 
 @Controller('/api/certificate')
 @ApiTags('Certificate')
@@ -40,6 +40,7 @@ export class CertificateController {
 
   @Get('/:certificateId/round/list')
   @ApiOperation({ summary: '자격증 일정 조회' })
+  @ApiParam({ name: 'certificateId', description: '자격증 ID' })
   @ApiResponse({ type: [CertificateRoundRes] })
   async findRoundsByCertificateId(
     @Param('certificateId') certificateId: string,
@@ -65,15 +66,16 @@ export class CertificateController {
       );
   }
 
-  @Post('/:certificateId/register')
+  @Post('/:certificateRoundId/register')
   @ApiOperation({ summary: '관심 자격증 등록' })
+  @ApiParam({ name: 'certificateRoundId', description: '자격증 회차 ID' })
   @ApiResponse({ type: CertificateUserRes })
   async registerCertificate(
     @AuthUser() { userId }: AuthUserType,
-    @Param('certificateId') certificateId: string,
+    @Param('certificateRoundId') certificateRoundId: string,
   ): Promise<CertificateUserRes> {
     return this.certificateFacade
-      .register(userId, certificateId)
+      .register(userId, certificateRoundId)
       .then((it) => it.toRes());
   }
 }
