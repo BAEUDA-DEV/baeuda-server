@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber, Min } from 'class-validator';
+import { IsNumber, IsString, Min } from 'class-validator';
 
 export class FindAllQuizReq {
   @ApiProperty({ type: Number, default: 0 })
@@ -14,4 +14,10 @@ export class FindAllQuizReq {
   @Type(() => Number)
   @Min(1)
   take: number;
+}
+
+export class SaveQuizLogReq {
+  @ApiProperty({ type: Number, default: 0 })
+  @IsString()
+  answerId: string;
 }

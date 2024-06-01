@@ -1,6 +1,8 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+import { AuthUserType } from '@/module/auth/infra/rest/guard';
+import { AuthUser } from '@/module/auth/infra/rest/guard/auth-user.decorator';
 import { UseAuth } from '@/module/auth/infra/rest/guard/use-auth.decorator';
 
 import { QuizFacade } from '@/module/quiz/application/facade/quiz.facade';
@@ -9,8 +11,11 @@ import {
   ApiPaginationResponse,
   PaginationRes,
 } from '@/common/dto/pagination.response';
-import { FindAllQuizReq } from '@/module/quiz/infra/dto/request';
-import { QuizRes } from '@/module/quiz/infra/dto/response';
+import {
+  FindAllQuizReq,
+  SaveQuizLogReq,
+} from '@/module/quiz/infra/dto/request';
+import { QuizLogRes, QuizRes } from '@/module/quiz/infra/dto/response';
 
 @Controller('/api/quiz')
 @ApiTags('Quiz')
@@ -31,5 +36,15 @@ export class QuizController {
       .then((it) =>
         it.toRes<QuizRes[]>((data) => data.map((child) => child.toRes())),
       );
+  }
+
+  @Post('/log/new')
+  @ApiOperation({ summary: '퀴즈 기록 생성' })
+  @ApiResponse({ type: QuizLogRes })
+  async saveLog(
+    @AuthUser() { userId }: AuthUserType,
+    @Body() req: SaveQuizLogReq,
+  ): Promise<QuizLogRes> {
+    return this.quizFacade.saveLog(userId, req).then((it) => it.toRes());
   }
 }
