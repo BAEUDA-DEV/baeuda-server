@@ -1,33 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { Certificate, Prisma, Quiz } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '@/common/injectable/prisma.service';
+import { CertificateType } from '@/module/certificate/domain/certificate';
 
 @Injectable()
 export class CertificateService {
   constructor(private readonly prisma: PrismaService) {}
 
   async countAll(
-    where?: Prisma.CertificateCountArgs['where'],
+    props: {
+      where?: Prisma.CertificateWhereInput;
+    },
     tx: Prisma.TransactionClient = this.prisma,
   ): Promise<number> {
-    return tx.certificate.count({
-      where,
-    });
+    return tx.certificate.count(props);
   }
 
   async findAll(
-    where?: Prisma.CertificateWhereInput,
-    skip?: number,
-    take?: number,
-    include?: Prisma.CertificateInclude,
+    props: {
+      where?: Prisma.CertificateWhereInput;
+      include?: Prisma.CertificateInclude;
+      skip?: number;
+      take?: number;
+    },
     tx: Prisma.TransactionClient = this.prisma,
-  ): Promise<(Certificate & { quiz?: Quiz })[]> {
-    return tx.certificate.findMany({
-      where,
-      skip,
-      take,
-      include,
-    });
+  ): Promise<CertificateType[]> {
+    return tx.certificate.findMany(props);
   }
 }

@@ -12,13 +12,13 @@ enum ProviderType {
 }
 
 model Auth {
-  id         String       @id @default(uuid())
-  createdAt  DateTime     @default(now()) @map("created_at")
-  updatedAt  DateTime     @updatedAt @map("updated_at")
-  provider   ProviderType @default(GOOGLE)
-  providerId String       @unique @map("provider_id")
-  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String       @unique @map("user_id")
+  id           String       @id @default(uuid())
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  providerType ProviderType @default(GOOGLE)
+  providerId   String       @unique @map("provider_id")
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String       @unique @map("user_id")
 
   @@index([providerId])
   @@map("auth")

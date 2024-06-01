@@ -22,12 +22,12 @@ export class QuizFacade {
       take: req.take,
       hasNext: count > req.skip + req.take,
       data: await this.quizService
-        .findAll(
-          { certificateId },
-          { certificate: true, answers: true },
-          req.skip,
-          req.take,
-        )
+        .findAll({
+          where: { certificateId },
+          include: { certificate: true, answers: true },
+          skip: req.skip,
+          take: req.take,
+        })
         .then((quizList) => quizList.map((quiz) => Quiz.fromPrisma(quiz))),
     });
   }

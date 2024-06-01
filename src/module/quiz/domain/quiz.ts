@@ -8,6 +8,11 @@ import { Certificate } from '@/module/certificate/domain/certificate';
 import { Answer } from '@/module/quiz/domain/answer';
 import { QuizRes } from '@/module/quiz/infra/dto/response';
 
+export interface QuizType extends PrismaQuiz {
+  certificate?: PrismaCertificate;
+  answers?: PrismaAnswer[];
+}
+
 interface IQuiz {
   id: string;
   createdAt: Date;
@@ -45,12 +50,7 @@ export class Quiz implements IQuiz {
     this.answers = answers;
   }
 
-  public static fromPrisma(
-    props: PrismaQuiz & {
-      certificate?: PrismaCertificate;
-      answers?: PrismaAnswer[];
-    },
-  ): Quiz {
+  public static fromPrisma(props: QuizType): Quiz {
     return new Quiz(
       props.id,
       props.createdAt,

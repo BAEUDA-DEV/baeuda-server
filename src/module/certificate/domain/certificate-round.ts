@@ -10,6 +10,10 @@ import {
   CertificateRoundRes,
 } from '@/module/certificate/infra/rest/dto/response';
 
+export interface CertificateRoundType extends PrismaCertificateRound {
+  certificate?: PrismaCertificate;
+}
+
 interface ICertificateRound {
   id: string;
   createdAt: Date;
@@ -67,9 +71,7 @@ export class CertificateRound implements ICertificateRound {
     this.resultAnnouncement = resultAnnouncement;
   }
 
-  public static fromPrisma(
-    props: PrismaCertificateRound & { certificate?: PrismaCertificate },
-  ): CertificateRound {
+  public static fromPrisma(props: CertificateRoundType): CertificateRound {
     return new CertificateRound(
       props.id,
       props.createdAt,

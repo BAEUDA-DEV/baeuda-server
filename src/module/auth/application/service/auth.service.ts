@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Auth, Prisma, ProviderType, User } from '@prisma/client';
+import { Auth, Prisma, User } from '@prisma/client';
 
 import { PrismaService } from '@/common/injectable/prisma.service';
 
@@ -8,26 +8,21 @@ export class AuthService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findOne(
-    where: Prisma.AuthWhereInput,
-    include?: Prisma.AuthInclude,
+    props: {
+      where: Prisma.AuthWhereInput;
+      include?: Prisma.AuthInclude;
+    },
     tx: Prisma.TransactionClient = this.prisma,
   ): Promise<(Auth & { user?: User }) | null> {
-    return tx.auth.findFirst({
-      where,
-      include,
-    });
+    return tx.auth.findFirst(props);
   }
 
   async create(
-    params: {
-      provider: ProviderType;
-      providerId: string;
-      userId: string;
+    props: {
+      data: Omit<Prisma.AuthCreateInput, 'id' | 'createdAt' | 'updatedAt'>;
     },
     tx: Prisma.TransactionClient = this.prisma,
   ): Promise<Auth> {
-    return tx.auth.create({
-      data: params,
-    });
+    return tx.auth.create(props);
   }
 }

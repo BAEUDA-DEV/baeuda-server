@@ -7,49 +7,48 @@ import {
 } from '@prisma/client';
 
 import { PrismaService } from '@/common/injectable/prisma.service';
+import { CertificateUserType } from '@/module/certificate/domain/certificate-user';
 
 @Injectable()
 export class CertificateUserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async countAll(
-    where?: Prisma.CertificateUserWhereInput,
+    props: {
+      where?: Prisma.CertificateUserWhereInput;
+    },
     tx: Prisma.TransactionClient = this.prisma,
   ): Promise<number> {
-    return tx.certificateUser.count({
-      where,
-    });
+    return tx.certificateUser.count(props);
   }
 
   async findAll(
-    where?: Prisma.CertificateUserWhereInput,
+    props: {
+      where?: Prisma.CertificateUserWhereInput;
+      include?: Prisma.CertificateUserInclude;
+    },
     tx: Prisma.TransactionClient = this.prisma,
-  ): Promise<
-    (CertificateUser & { certificateRound: CertificateRound; user: User })[]
-  > {
-    return tx.certificateUser.findMany({
-      where,
-      include: { certificateRound: true, user: true },
-    });
+  ): Promise<CertificateUserType[]> {
+    return tx.certificateUser.findMany(props);
   }
 
   async findOne(
-    where?: Prisma.CertificateUserWhereInput,
+    props: {
+      where?: Prisma.CertificateUserWhereInput;
+      include?: Prisma.CertificateUserInclude;
+    },
     tx: Prisma.TransactionClient = this.prisma,
-  ): Promise<
-    | (CertificateUser & { certificateRound: CertificateRound; user: User })
-    | null
-  > {
-    return tx.certificateUser.findFirst({
-      where: where,
-      include: { certificateRound: true, user: true },
-    });
+  ): Promise<CertificateUserType | null> {
+    return tx.certificateUser.findFirst(props);
   }
 
   async create(
-    params: {
-      certificateRoundId: string;
-      userId: string;
+    props: {
+      data: Omit<
+        Prisma.CertificateUserCreateInput,
+        'id' | 'createdAt' | 'updatedAt'
+      >;
+      include: Prisma.CertificateUserInclude;
     },
     tx: Prisma.TransactionClient = this.prisma,
   ): Promise<
@@ -58,9 +57,6 @@ export class CertificateUserService {
       user: User;
     }
   > {
-    return tx.certificateUser.create({
-      data: params,
-      include: { certificateRound: true, user: true },
-    });
+    return tx.certificateUser.create(props);
   }
 }

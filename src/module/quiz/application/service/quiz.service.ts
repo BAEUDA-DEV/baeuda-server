@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Answer, Certificate, Prisma, Quiz } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '@/common/injectable/prisma.service';
+import { QuizType } from '@/module/quiz/domain/quiz';
 
 @Injectable()
 export class QuizService {
@@ -15,17 +16,14 @@ export class QuizService {
   }
 
   async findAll(
-    where?: Prisma.QuizWhereInput,
-    include?: Prisma.QuizInclude,
-    skip?: number,
-    take?: number,
+    props: {
+      where?: Prisma.QuizWhereInput;
+      include?: Prisma.QuizInclude;
+      skip?: number;
+      take?: number;
+    },
     tx: Prisma.TransactionClient = this.prisma,
-  ): Promise<(Quiz & { certificate?: Certificate; answers?: Answer[] })[]> {
-    return tx.quiz.findMany({
-      where,
-      include,
-      skip,
-      take,
-    });
+  ): Promise<QuizType[]> {
+    return tx.quiz.findMany(props);
   }
 }
