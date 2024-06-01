@@ -1,3 +1,6 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, IsNumber } from 'class-validator';
+
 interface IPaginationRes<T> {
   total: number;
   skip: number;
@@ -7,10 +10,23 @@ interface IPaginationRes<T> {
 }
 
 export class PaginationRes<T> implements IPaginationRes<T> {
+  @ApiProperty()
+  @IsNumber()
   total: number;
+
+  @ApiProperty()
+  @IsNumber()
   skip: number;
+
+  @ApiProperty()
+  @IsNumber()
   take: number;
+
+  @ApiProperty()
+  @IsBoolean()
   hasNext: boolean;
+
+  @ApiProperty()
   data: T;
 
   constructor(

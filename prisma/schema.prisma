@@ -123,6 +123,8 @@ model Answer {
   updatedAt DateTime @updatedAt @map("updated_at")
   quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
   quizId    String   @map("quid_id")
+  content   String
+  isCorrect Boolean  @map("is_correct")
 
   @@map("answer")
 }
