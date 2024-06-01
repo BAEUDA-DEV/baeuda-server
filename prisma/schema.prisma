@@ -113,6 +113,7 @@ model Quiz {
   certificateId String      @map("certificate_id")
   question      String
   answers       Answer[]
+  Comment       Comment[]
 
   @@map("quiz")
 }
@@ -135,6 +136,8 @@ model Comment {
   updatedAt DateTime @updatedAt @map("updated_at")
   writer    User     @relation(fields: [writerId], references: [id], onDelete: Cascade)
   writerId  String
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId    String   @map("quiz_id")
   content   String
 
   @@map("comment")
