@@ -17,4 +17,14 @@ export class CertificateRoundService {
   ): Promise<CertificateRoundType[]> {
     return tx.certificateRound.findMany(props);
   }
+
+  async update(
+    props: {
+      data: Prisma.CertificateRoundUpdateInput;
+      where: Prisma.CertificateRoundWhereUniqueInput;
+    },
+    tx: Prisma.TransactionClient = this.prisma,
+  ): Promise<CertificateRoundType> {
+    return tx.certificateRound.update(props);
+  }
 }

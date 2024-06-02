@@ -11,7 +11,6 @@ import {
   CertificateRoundRes,
   CertificateUserRes,
 } from '@/module/certificate/infra/rest/dto/response';
-import { UserRes } from '@/module/user/infra/rest/dto/response';
 
 export interface CertificateUserType extends PrismaCertificateUser {
   certificateRound?: PrismaCertificateRound;
@@ -77,7 +76,6 @@ export class CertificateUser implements ICertificateUser {
       certificateRound: this.certificateRound
         ? CertificateRoundRes.from(this.certificateRound)
         : null,
-      user: this.user ? UserRes.from(this.user) : null,
     });
   }
 }

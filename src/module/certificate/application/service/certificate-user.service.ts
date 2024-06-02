@@ -26,6 +26,7 @@ export class CertificateUserService {
     props: {
       where?: Prisma.CertificateUserWhereInput;
       include?: Prisma.CertificateUserInclude;
+      orderBy?: Prisma.CertificateUserOrderByWithRelationInput;
     },
     tx: Prisma.TransactionClient = this.prisma,
   ): Promise<CertificateUserType[]> {
