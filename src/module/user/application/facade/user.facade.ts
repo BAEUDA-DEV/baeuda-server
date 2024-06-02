@@ -4,6 +4,8 @@ import { UserService } from '@/module/user/application/service/user.service';
 
 import { User } from '@/module/user/domain/user';
 
+import { UserUpdateReq } from '@/module/user/infra/rest/dto/request';
+
 @Injectable()
 export class UserFacade {
   constructor(private readonly userService: UserService) {}
@@ -17,5 +19,14 @@ export class UserFacade {
     }
 
     return User.fromPrisma(user);
+  }
+
+  async update(userId: string, req: UserUpdateReq): Promise<User> {
+    return this.userService
+      .update({
+        data: { name: req.name },
+        where: { id: userId },
+      })
+      .then((user) => User.fromPrisma(user));
   }
 }

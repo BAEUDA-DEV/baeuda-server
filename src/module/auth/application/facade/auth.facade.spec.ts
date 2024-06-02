@@ -76,6 +76,7 @@ describe('AuthFacade Test', () => {
       providerId: 'GOOGLE_USER_ID_01',
       name: 'user_name_01',
       email: 'user_01@email.com',
+      profileImageUrl: null,
     });
 
     expect(token).toBeInstanceOf(Token);
@@ -89,6 +90,7 @@ describe('AuthFacade Test', () => {
       providerId: 'GOOGLE_USER_ID_01',
       name: 'user_name_01',
       email: 'user_01@email.com',
+      profileImageUrl: null,
     });
 
     expect(token).toBeInstanceOf(Token);

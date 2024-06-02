@@ -37,6 +37,7 @@ export class AuthFacade {
               create: {
                 name: req.name ?? '',
                 email: req.email ?? '',
+                profileImageUrl: req.profileImageUrl,
               },
             },
           },
