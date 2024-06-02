@@ -36,7 +36,7 @@ export class UserRes implements IUserRes {
   @IsString()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, nullable: true })
   @IsOptional()
   @IsString()
   profileImageUrl: string | null;
