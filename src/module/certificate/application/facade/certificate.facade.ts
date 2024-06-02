@@ -72,6 +72,7 @@ export class CertificateFacade {
         .findAll({
           where: { userId },
           include: { certificateRound: true, user: true },
+          orderBy: { createdAt: 'desc' },
         })
         .then((certificateUsers) =>
           certificateUsers.map((certificateUser) =>

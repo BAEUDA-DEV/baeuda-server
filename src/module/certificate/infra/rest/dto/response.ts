@@ -2,8 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-import { UserRes } from '@/module/user/infra/rest/dto/response';
-
 interface ICertificateRes {
   id: string;
   createdAt: Date;
@@ -30,7 +28,6 @@ interface ICertificateUserRes {
   createdAt: Date;
   updatedAt: Date;
   certificateRound: CertificateRoundRes | null;
-  user: UserRes | null;
 }
 
 export class CertificateRes implements ICertificateRes {
@@ -83,8 +80,8 @@ export class CertificateRoundRes implements ICertificateRoundRes {
   @IsDate()
   updatedAt: Date;
 
-  @ApiProperty({ nullable: true })
-  @Type(() => CertificateRoundRes)
+  @ApiProperty({ type: CertificateRes, nullable: true })
+  @Type(() => CertificateRes)
   certificate: CertificateRes | null;
 
   @ApiProperty()
@@ -172,26 +169,20 @@ export class CertificateUserRes implements ICertificateUserRes {
   @IsDate()
   updatedAt: Date;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ type: CertificateRoundRes, nullable: true })
   @Type(() => CertificateRoundRes)
   certificateRound: CertificateRoundRes | null;
-
-  @ApiProperty({ nullable: true })
-  @Type(() => UserRes)
-  user: UserRes | null;
 
   constructor(
     id: string,
     createdAt: Date,
     updatedAt: Date,
     certificateRound: CertificateRoundRes | null,
-    user: UserRes | null,
   ) {
     this.id = id;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.certificateRound = certificateRound;
-    this.user = user;
   }
 
   public static from(props: ICertificateUserRes): CertificateUserRes {
@@ -200,7 +191,6 @@ export class CertificateUserRes implements ICertificateUserRes {
       props.createdAt,
       props.updatedAt,
       props.certificateRound,
-      props.user,
     );
   }
 }

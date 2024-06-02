@@ -55,7 +55,7 @@ export class CertificateController {
 
   @Get('/registered')
   @ApiOperation({ summary: '관심 등록된 자격증 목록 조회' })
-  @ApiPaginationResponse(CertificateRes)
+  @ApiPaginationResponse(CertificateUserRes)
   async findRegisteredCertificate(
     @AuthUser() { userId }: AuthUserType,
     @Query() req: FindAllRegisteredCertificateReq,
