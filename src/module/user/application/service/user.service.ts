@@ -8,20 +8,20 @@ export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findOne(
-    where: Prisma.UserWhereInput,
+    props: {
+      where: Prisma.UserWhereInput;
+    },
     tx: Prisma.TransactionClient = this.prisma,
   ): Promise<User | null> {
-    return tx.user.findFirst({
-      where,
-    });
+    return tx.user.findFirst(props);
   }
 
   async create(
-    params: { name: string; email: string },
+    props: {
+      data: Omit<Prisma.UserCreateInput, 'id' | 'createAt' | 'updatedAt'>;
+    },
     tx: Prisma.TransactionClient = this.prisma,
   ): Promise<User> {
-    return tx.user.create({
-      data: params,
-    });
+    return tx.user.create(props);
   }
 }

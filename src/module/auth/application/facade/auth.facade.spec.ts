@@ -22,7 +22,7 @@ const auth: Auth = {
   id: 'auth_id_01',
   createdAt: new Date(),
   updatedAt: new Date(),
-  provider: ProviderType.GOOGLE,
+  providerType: ProviderType.GOOGLE,
   providerId: 'GOOGLE_USER_ID_01',
   userId: 'user_id_01',
 };
@@ -69,7 +69,7 @@ describe('AuthFacade Test', () => {
   });
 
   it('회원이 없는 경우 회원가입을 할 수 있다.', async () => {
-    prisma.$transaction.mockResolvedValue(auth);
+    prisma.auth.create.mockResolvedValue(auth);
 
     const token = await authFacade.sign({
       provider: OAuthProvider.GOOGLE,

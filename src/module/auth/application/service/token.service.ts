@@ -20,18 +20,22 @@ export class TokenService {
   }> {
     try {
       return {
-        payload: await this.jwtSerivce.verifyAsync<AuthUserType>(token, {
-          secret: this.configService.get('JWT_SECRET'),
-        }),
+        payload: await this.jwtSerivce
+          .verifyAsync<AuthUserType>(token, {
+            secret: this.configService.get('JWT_SECRET'),
+          })
+          .then((res) => ({ userId: res.userId })),
         type: 'access',
       };
     } catch (e) {}
 
     try {
       return {
-        payload: await this.jwtSerivce.verifyAsync<AuthUserType>(token, {
-          secret: this.configService.get('JWT_REFRESH_SECRET'),
-        }),
+        payload: await this.jwtSerivce
+          .verifyAsync<AuthUserType>(token, {
+            secret: this.configService.get('JWT_REFRESH_SECRET'),
+          })
+          .then((res) => ({ userId: res.userId })),
         type: 'refresh',
       };
     } catch (e) {}

@@ -9,7 +9,9 @@ export class UserFacade {
   constructor(private readonly userService: UserService) {}
 
   async me(userId: string): Promise<User> {
-    const user = await this.userService.findOne({ id: userId });
+    const user = await this.userService.findOne({
+      where: { id: userId },
+    });
     if (!user) {
       throw new NotFoundException('사용자를 찾을 수 없습니다.');
     }

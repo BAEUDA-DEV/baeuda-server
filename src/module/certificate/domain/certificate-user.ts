@@ -4,8 +4,8 @@ import {
   User as PrismaUser,
 } from '@prisma/client';
 
-import { User } from '@/module/user/domain/user';
 import { CertificateRound } from '@/module/certificate/domain/certificate-round';
+import { User } from '@/module/user/domain/user';
 
 import {
   CertificateRoundRes,
@@ -13,13 +13,18 @@ import {
 } from '@/module/certificate/infra/rest/dto/response';
 import { UserRes } from '@/module/user/infra/rest/dto/response';
 
+export interface CertificateUserType extends PrismaCertificateUser {
+  certificateRound?: PrismaCertificateRound;
+  user?: PrismaUser;
+}
+
 interface ICertificateUser {
   id: string;
   createdAt: Date;
   updatedAt: Date;
-  certificateRound: CertificateRound;
+  certificateRound: CertificateRound | null;
   certificateRoundId: string;
-  user: User;
+  user: User | null;
   userId: string;
 }
 
@@ -27,18 +32,18 @@ export class CertificateUser implements ICertificateUser {
   id: string;
   createdAt: Date;
   updatedAt: Date;
-  certificateRound: CertificateRound;
+  certificateRound: CertificateRound | null;
   certificateRoundId: string;
-  user: User;
+  user: User | null;
   userId: string;
 
   constructor(
     id: string,
     createdAt: Date,
     updatedAt: Date,
-    certificate: CertificateRound,
+    certificate: CertificateRound | null,
     certificateId: string,
-    user: User,
+    user: User | null,
     userId: string,
   ) {
     this.id = id;
@@ -50,19 +55,16 @@ export class CertificateUser implements ICertificateUser {
     this.userId = userId;
   }
 
-  public static fromPrisma(
-    props: PrismaCertificateUser & {
-      certificateRound: PrismaCertificateRound;
-      user: PrismaUser;
-    },
-  ): CertificateUser {
+  public static fromPrisma(props: CertificateUserType): CertificateUser {
     return new CertificateUser(
       props.id,
       props.createdAt,
       props.updatedAt,
-      CertificateRound.fromPrisma(props.certificateRound),
+      props?.certificateRound
+        ? CertificateRound.fromPrisma(props.certificateRound)
+        : null,
       props.certificateRoundId,
-      User.fromPrisma(props.user),
+      props?.user ? User.fromPrisma(props.user) : null,
       props.userId,
     );
   }
@@ -72,8 +74,10 @@ export class CertificateUser implements ICertificateUser {
       id: this.id,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      certificateRound: CertificateRoundRes.from(this.certificateRound),
-      user: UserRes.from(this.user),
+      certificateRound: this.certificateRound
+        ? CertificateRoundRes.from(this.certificateRound)
+        : null,
+      user: this.user ? UserRes.from(this.user) : null,
     });
   }
 }

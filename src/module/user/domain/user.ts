@@ -8,6 +8,7 @@ interface IUser {
   updatedAt: Date;
   name: string;
   email: string;
+  profileImageUrl: string | null;
 }
 
 export class User implements IUser {
@@ -16,6 +17,7 @@ export class User implements IUser {
   updatedAt: Date;
   name: string;
   email: string;
+  profileImageUrl: string | null;
 
   constructor(
     id: string,
@@ -23,12 +25,14 @@ export class User implements IUser {
     updatedAt: Date,
     name: string,
     email: string,
+    profileImageUrl: string | null,
   ) {
     this.id = id;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.name = name;
     this.email = email;
+    this.profileImageUrl = profileImageUrl;
   }
 
   public static from(props: IUser): User {
@@ -38,16 +42,18 @@ export class User implements IUser {
       props.updatedAt,
       props.name,
       props.email,
+      props.profileImageUrl,
     );
   }
 
-  public static fromPrisma(prismaUser: PrismaUser): User {
+  public static fromPrisma(props: PrismaUser): User {
     return new User(
-      prismaUser.id,
-      prismaUser.createdAt,
-      prismaUser.updatedAt,
-      prismaUser.name,
-      prismaUser.email,
+      props.id,
+      props.createdAt,
+      props.updatedAt,
+      props.name,
+      props.email,
+      props.profileImageUrl,
     );
   }
 

@@ -12,13 +12,13 @@ enum ProviderType {
 }
 
 model Auth {
-  id         String       @id @default(uuid())
-  createdAt  DateTime     @default(now()) @map("created_at")
-  updatedAt  DateTime     @updatedAt @map("updated_at")
-  provider   ProviderType @default(GOOGLE)
-  providerId String       @unique @map("provider_id")
-  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String       @unique @map("user_id")
+  id           String       @id @default(uuid())
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  providerType ProviderType @default(GOOGLE)
+  providerId   String       @unique @map("provider_id")
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String       @unique @map("user_id")
 
   @@index([providerId])
   @@map("auth")
@@ -34,6 +34,7 @@ model User {
   auth            Auth?
   certificates    CertificateUser[]
   comments        Comment[]
+  QuizLog         QuizLog[]
 
   @@map("user")
 }
@@ -113,16 +114,32 @@ model Quiz {
   certificateId String      @map("certificate_id")
   question      String
   answers       Answer[]
+  Comment       Comment[]
 
   @@map("quiz")
 }
 
-model Answer {
+model QuizLog {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  quizId    String   @map("quid_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @map("user_id")
+  answer    Answer   @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  answerId  String   @map("answer_id")
+
+  @@map("quiz_log")
+}
+
+model Answer {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  quiz      Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId    String    @map("quid_id")
+  content   String
+  isCorrect Boolean   @map("is_correct")
+  QuizLog   QuizLog[]
 
   @@map("answer")
 }
@@ -133,6 +150,8 @@ model Comment {
   updatedAt DateTime @updatedAt @map("updated_at")
   writer    User     @relation(fields: [writerId], references: [id], onDelete: Cascade)
   writerId  String
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId    String   @map("quiz_id")
   content   String
 
   @@map("comment")

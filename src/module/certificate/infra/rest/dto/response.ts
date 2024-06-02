@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 import { UserRes } from '@/module/user/infra/rest/dto/response';
 
@@ -29,8 +29,8 @@ interface ICertificateUserRes {
   id: string;
   createdAt: Date;
   updatedAt: Date;
-  certificateRound: CertificateRoundRes;
-  user: UserRes;
+  certificateRound: CertificateRoundRes | null;
+  user: UserRes | null;
 }
 
 export class CertificateRes implements ICertificateRes {
@@ -172,20 +172,20 @@ export class CertificateUserRes implements ICertificateUserRes {
   @IsDate()
   updatedAt: Date;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Type(() => CertificateRoundRes)
-  certificateRound: CertificateRoundRes;
+  certificateRound: CertificateRoundRes | null;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Type(() => UserRes)
-  user: UserRes;
+  user: UserRes | null;
 
   constructor(
     id: string,
     createdAt: Date,
     updatedAt: Date,
-    certificateRound: CertificateRoundRes,
-    user: UserRes,
+    certificateRound: CertificateRoundRes | null,
+    user: UserRes | null,
   ) {
     this.id = id;
     this.createdAt = createdAt;

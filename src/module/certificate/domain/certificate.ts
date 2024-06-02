@@ -1,6 +1,15 @@
-import { Certificate as PrismaCertificate } from '@prisma/client';
+import {
+  Certificate as PrismaCertificate,
+  CertificateRound as PrismaCertificateRound,
+  Quiz as PrismaQuiz,
+} from '@prisma/client';
 
 import { CertificateRes } from '@/module/certificate/infra/rest/dto/response';
+
+export interface CertificateType extends PrismaCertificate {
+  rounds?: PrismaCertificateRound[];
+  quiz?: PrismaQuiz[];
+}
 
 interface ICertificate {
   id: string;
@@ -31,7 +40,7 @@ export class Certificate implements ICertificate {
     this.name = name;
   }
 
-  public static fromPrisma(props: PrismaCertificate): Certificate {
+  public static fromPrisma(props: CertificateType): Certificate {
     return new Certificate(
       props.id,
       props.createdAt,
