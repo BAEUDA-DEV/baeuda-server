@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuthUserType } from '@/module/auth/infra/rest/guard';
 import { AuthUser } from '@/module/auth/infra/rest/guard/auth-user.decorator';
@@ -26,7 +26,6 @@ export class QuizController {
 
   @Get('/')
   @ApiOperation({ summary: '퀴즈 목록 조회' })
-  @ApiParam({ name: 'certificateId', description: '자격증 ID' })
   @ApiPaginationResponse(QuizRes)
   async list(@Query() req: FindAllQuizReq): Promise<PaginationRes<QuizRes[]>> {
     return this.quizFacade
