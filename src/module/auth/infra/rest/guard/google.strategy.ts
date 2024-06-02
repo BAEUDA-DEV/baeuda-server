@@ -28,7 +28,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       provider: OAuthProvider.GOOGLE,
       providerId: profile.id,
       name: profile?.name?.givenName ?? null,
-      email: profile.emails?.[0]?.value ?? null,
+      email: profile?.emails?.[0]?.value ?? null,
+      profileImageUrl: profile?.photos?.[0]?.value ?? null,
     };
   }
 }

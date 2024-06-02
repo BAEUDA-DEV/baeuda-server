@@ -64,6 +64,7 @@ export class User implements IUser {
       updatedAt: this.updatedAt,
       name: this.name,
       email: this.email,
+      profileImageUrl: this.profileImageUrl,
     });
   }
 }

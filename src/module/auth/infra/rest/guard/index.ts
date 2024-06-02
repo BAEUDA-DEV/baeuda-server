@@ -5,6 +5,7 @@ export interface OAuthType {
   providerId: string;
   name: string | null;
   email: string | null;
+  profileImageUrl: string | null;
 }
 
 export interface AuthUserType {
