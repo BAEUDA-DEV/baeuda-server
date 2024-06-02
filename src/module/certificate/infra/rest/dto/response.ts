@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import dayjs from 'dayjs';
 
 interface ICertificateRes {
   id: string;
@@ -21,6 +22,7 @@ interface ICertificateRoundRes {
   testStart: Date;
   testEnd: Date;
   resultAnnouncement: Date;
+  remainDay: number;
 }
 
 interface ICertificateUserRes {
@@ -112,6 +114,10 @@ export class CertificateRoundRes implements ICertificateRoundRes {
   @IsDate()
   resultAnnouncement: Date;
 
+  @ApiProperty()
+  @IsNumber()
+  remainDay: number;
+
   constructor(
     id: string,
     createdAt: Date,
@@ -136,6 +142,7 @@ export class CertificateRoundRes implements ICertificateRoundRes {
     this.testStart = testStart;
     this.testEnd = testEnd;
     this.resultAnnouncement = resultAnnouncement;
+    this.remainDay = dayjs(testStart).diff(new Date(), 'd');
   }
 
   public static from(props: ICertificateRoundRes): CertificateRoundRes {
