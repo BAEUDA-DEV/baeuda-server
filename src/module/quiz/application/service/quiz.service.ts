@@ -9,10 +9,12 @@ export class QuizService {
   constructor(private readonly prisma: PrismaService) {}
 
   async countAll(
-    where?: Prisma.QuizWhereInput,
+    props: {
+      where?: Prisma.QuizWhereInput;
+    },
     tx: Prisma.TransactionClient = this.prisma,
   ): Promise<number> {
-    return tx.quiz.count({ where });
+    return tx.quiz.count(props);
   }
 
   async findAll(

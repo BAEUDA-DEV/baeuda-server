@@ -23,7 +23,7 @@ export class QuizFacade {
     certificateId: string,
     req: FindAllQuizReq,
   ): Promise<Pagination<Quiz[]>> {
-    const count = await this.quizService.countAll({ certificateId });
+    const count = await this.quizService.countAll({ where: { certificateId } });
 
     return Pagination.from({
       total: count,
