@@ -22,7 +22,7 @@ interface ICertificateRoundRes {
   testStart: Date;
   testEnd: Date;
   resultAnnouncement: Date;
-  remainDay: number;
+  userCount: number;
 }
 
 interface ICertificateUserRes {
@@ -116,6 +116,10 @@ export class CertificateRoundRes implements ICertificateRoundRes {
 
   @ApiProperty()
   @IsNumber()
+  userCount: number;
+
+  @ApiProperty()
+  @IsNumber()
   remainDay: number;
 
   constructor(
@@ -130,6 +134,7 @@ export class CertificateRoundRes implements ICertificateRoundRes {
     testStart: Date,
     testEnd: Date,
     resultAnnouncement: Date,
+    userCount: number,
   ) {
     this.id = id;
     this.createdAt = createdAt;
@@ -142,6 +147,7 @@ export class CertificateRoundRes implements ICertificateRoundRes {
     this.testStart = testStart;
     this.testEnd = testEnd;
     this.resultAnnouncement = resultAnnouncement;
+    this.userCount = userCount;
     this.remainDay = dayjs(testStart).diff(new Date(), 'd');
   }
 
@@ -158,6 +164,7 @@ export class CertificateRoundRes implements ICertificateRoundRes {
       props.testStart,
       props.testEnd,
       props.resultAnnouncement,
+      props.userCount,
     );
   }
 }

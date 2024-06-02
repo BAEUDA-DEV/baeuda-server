@@ -78,6 +78,7 @@ model CertificateRound {
   testStart          DateTime          @map("test_start")
   testEnd            DateTime          @map("test_end")
   resultAnnouncement DateTime          @map("result_announcement")
+  userCount          Int               @default(0)
   users              CertificateUser[]
 
   @@map("certificate_round")
