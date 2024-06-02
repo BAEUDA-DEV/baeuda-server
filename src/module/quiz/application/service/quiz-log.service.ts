@@ -9,6 +9,27 @@ import { QuizLogType } from '@/module/quiz/domain/quiz-log';
 export class QuizLogSerivce {
   constructor(private readonly prisma: PrismaService) {}
 
+  async countAll(
+    props: {
+      where?: Prisma.QuizLogWhereInput;
+    },
+    tx: Prisma.TransactionClient = this.prisma,
+  ): Promise<number> {
+    return tx.quizLog.count(props);
+  }
+
+  async findAll(
+    props: {
+      where?: Prisma.QuizLogWhereInput;
+      include?: Prisma.QuizLogInclude;
+      skip?: number;
+      take?: number;
+    },
+    tx: Prisma.TransactionClient = this.prisma,
+  ): Promise<QuizLogType[]> {
+    return tx.quizLog.findMany(props);
+  }
+
   async create(
     props: {
       data: Omit<Prisma.QuizLogCreateInput, 'id' | 'createAt' | 'updatedAt'>;

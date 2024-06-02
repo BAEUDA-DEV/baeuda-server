@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuthUserType } from '@/module/auth/infra/rest/guard';
@@ -12,6 +12,7 @@ import {
   PaginationRes,
 } from '@/common/dto/pagination.response';
 import {
+  FindAllQuizLogsReq,
   FindAllQuizReq,
   SaveQuizLogReq,
 } from '@/module/quiz/infra/dto/request';
@@ -23,18 +24,29 @@ import { QuizLogRes, QuizRes } from '@/module/quiz/infra/dto/response';
 export class QuizController {
   constructor(private readonly quizFacade: QuizFacade) {}
 
-  @Get('/:certificateId')
+  @Get('/')
   @ApiOperation({ summary: '퀴즈 목록 조회' })
   @ApiParam({ name: 'certificateId', description: '자격증 ID' })
   @ApiPaginationResponse(QuizRes)
-  async list(
-    @Param('certificateId') certificateId: string,
-    @Query() req: FindAllQuizReq,
-  ): Promise<PaginationRes<QuizRes[]>> {
+  async list(@Query() req: FindAllQuizReq): Promise<PaginationRes<QuizRes[]>> {
     return this.quizFacade
-      .findAll(certificateId, req)
+      .findAll(req)
       .then((it) =>
         it.toRes<QuizRes[]>((data) => data.map((child) => child.toRes())),
+      );
+  }
+
+  @Get('/log')
+  @ApiOperation({ summary: '퀴즈 기록 목록 조회' })
+  @ApiPaginationResponse(QuizLogRes)
+  async logList(
+    @AuthUser() { userId }: AuthUserType,
+    @Query() req: FindAllQuizLogsReq,
+  ): Promise<PaginationRes<QuizLogRes[]>> {
+    return this.quizFacade
+      .findAllLogs(userId, req)
+      .then((it) =>
+        it.toRes<QuizLogRes[]>((data) => data.map((child) => child.toRes())),
       );
   }
 
