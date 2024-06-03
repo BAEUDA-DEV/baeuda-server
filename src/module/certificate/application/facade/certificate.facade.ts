@@ -73,7 +73,10 @@ export class CertificateFacade {
       data: await this.certificateUserService
         .findAll({
           where: { userId },
-          include: { certificateRound: true, user: true },
+          include: {
+            user: true,
+            certificateRound: { include: { certificate: true } },
+          },
           orderBy: { createdAt: 'desc' },
         })
         .then((certificateUsers) =>
@@ -119,7 +122,7 @@ export class CertificateFacade {
             },
             include: {
               user: true,
-              certificateRound: true,
+              certificateRound: { include: { certificate: true } },
             },
           },
           tx,
