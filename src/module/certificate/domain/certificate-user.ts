@@ -10,7 +10,7 @@ import { User } from '@/module/user/domain/user';
 import {
   CertificateRoundRes,
   CertificateUserRes,
-} from '@/module/certificate/infra/rest/dto/response';
+} from '@/module/certificate/infra/dto/response';
 import { UserRes } from '@/module/user/infra/rest/dto/response';
 
 export interface CertificateUserType extends PrismaCertificateUser {

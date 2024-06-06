@@ -9,6 +9,7 @@ import { AuthModule } from '@/module/auth/auth.module';
 import { CertificateModule } from '@/module/certificate/certificate.module';
 import { QuizModule } from '@/module/quiz/quiz.module';
 import { UserModule } from '@/module/user/user.module';
+import { ArmyModule } from '@/module/army/army.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UserModule } from '@/module/user/user.module';
     CertificateModule,
     QuizModule,
     UserModule,
+    ArmyModule,
   ],
 })
 export class AppModule {}

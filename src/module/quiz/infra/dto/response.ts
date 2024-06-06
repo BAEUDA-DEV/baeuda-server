@@ -8,7 +8,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { CertificateRes } from '@/module/certificate/infra/rest/dto/response';
+import { CertificateRes } from '@/module/certificate/infra/dto/response';
 
 interface IQuizRes {
   id: string;
