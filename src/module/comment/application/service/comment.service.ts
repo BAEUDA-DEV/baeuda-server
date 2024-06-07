@@ -10,10 +10,12 @@ export class CommentService {
   constructor(private readonly prisma: PrismaService) {}
 
   async countAll(
-    where?: Prisma.CommentWhereInput,
+    props: {
+      where?: Prisma.CommentWhereInput
+    },
     tx: Prisma.TransactionClient = this.prisma,
   ): Promise<number> {
-    return tx.comment.count({ where });
+    return tx.comment.count(props);
   }
 
   async findOne(
