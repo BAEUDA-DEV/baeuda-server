@@ -12,7 +12,7 @@ import { CertificateUser } from '@/module/certificate/domain/certificate-user';
 import {
   FindAllCertificateReq,
   FindAllRegisteredCertificateReq,
-} from '@/module/certificate/infra/dto/request';
+} from '@/module/certificate/infra/rest/dto/request';
 
 @Injectable()
 export class CertificateFacade {

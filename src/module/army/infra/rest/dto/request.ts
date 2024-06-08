@@ -20,18 +20,3 @@ export class FindAllArmyReq {
   @Min(1)
   take: number;
 }
-
-// maybe not necessary
-export class FindAllRegisteredArmyReq {
-  @ApiProperty({ type: Number, default: 0 })
-  @IsNumber()
-  @Type(() => Number)
-  @Min(0)
-  skip: number;
-
-  @ApiProperty({ default: 10 })
-  @IsNumber()
-  @Type(() => Number)
-  @Min(1)
-  take: number;
-}

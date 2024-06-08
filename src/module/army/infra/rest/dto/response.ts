@@ -8,7 +8,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { CertificateRes } from '@/module/certificate/infra/dto/response';
+import { CertificateRes } from '@/module/certificate/infra/rest/dto/response';
 
 interface IArmyRes {
   id: string;

@@ -6,8 +6,8 @@ import { UseAuth } from '@/module/auth/infra/rest/guard/use-auth.decorator';
 import { QuizFacade } from '@/module/quiz/application/facade/quiz.facade';
 
 import { PaginationRes } from '@/common/dto/pagination.response';
-import { FindAllQuizReq } from '@/module/quiz/infra/dto/request';
-import { QuizRes } from '@/module/quiz/infra/dto/response';
+import { FindAllQuizReq } from '@/module/quiz/infra/rest/dto/request';
+import { QuizRes } from '@/module/quiz/infra/rest/dto/response';
 
 @Controller('/api/quiz')
 @ApiTags('Quiz')

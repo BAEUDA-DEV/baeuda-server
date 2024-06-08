@@ -3,21 +3,14 @@ import { Injectable } from '@nestjs/common';
 import { Pagination } from '@/common/domain/pagination';
 
 import { ArmyService } from '@/module/army/application/service/army.service';
-// import { ArmyCertificateService } from '@/module/army/application/service/army-certificate.service';
 
 import { Army } from '@/module/army/domain/army';
-// import { ArmyCertificate } from '@/module/army/domain/amry-certificate';
-import { FindAllArmyReq } from '@/module/army/infra/dto/request';
+import { FindAllArmyReq } from '@/module/army/infra/rest/dto/request';
 
 @Injectable()
 export class ArmyFacade {
-  constructor(
-    private readonly armyService: ArmyService,
-    // private readonly armyCertificateService: ArmyCertificateService,
-  ) {}
+  constructor(private readonly armyService: ArmyService) {}
 
-  // necess method
-  // findAll : return all
   async findAll(req: FindAllArmyReq): Promise<Pagination<Army[]>> {
     const count = await this.armyService.countAll({});
 
@@ -35,19 +28,4 @@ export class ArmyFacade {
         .then((res) => res.map((it) => Army.fromPrisma(it))),
     });
   }
-
-  // async findArmyCertificateByArmyId(
-  //   armySpecialityId: string,
-  // ): Promise<ArmyCertificate[]> {
-  //   return this.armyCertificateService
-  //     .findAll({
-  //       where: { armySpecialityId },
-  //       include: { armySpeciality: true },
-  //     })
-  //     .then((armyCertificates) =>
-  //       armyCertificates.map((armyCertificate) =>
-  //         ArmyCertificate.fromPrisma(armyCertificate),
-  //       ),
-  //     );
-  // }
 }

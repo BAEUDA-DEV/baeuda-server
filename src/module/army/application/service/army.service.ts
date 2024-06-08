@@ -17,7 +17,6 @@ export class ArmyService {
     return tx.armySpeciality.count(props);
   }
 
-  // find all army speciality
   async findAll(
     props: {
       where?: Prisma.ArmySpecialityWhereInput;

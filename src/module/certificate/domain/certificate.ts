@@ -4,7 +4,7 @@ import {
   Quiz as PrismaQuiz,
 } from '@prisma/client';
 
-import { CertificateRes } from '@/module/certificate/infra/dto/response';
+import { CertificateRes } from '@/module/certificate/infra/rest/dto/response';
 
 export interface CertificateType extends PrismaCertificate {
   rounds?: PrismaCertificateRound[];

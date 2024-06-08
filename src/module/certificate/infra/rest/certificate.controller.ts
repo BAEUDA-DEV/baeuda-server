@@ -10,12 +10,12 @@ import { CertificateFacade } from '@/module/certificate/application/facade/certi
 import {
   FindAllCertificateReq,
   FindAllRegisteredCertificateReq,
-} from '@/module/certificate/infra/dto/request';
+} from '@/module/certificate/infra/rest/dto/request';
 import {
   CertificateRes,
   CertificateRoundRes,
   CertificateUserRes,
-} from '@/module/certificate/infra/dto/response';
+} from '@/module/certificate/infra/rest/dto/response';
 
 @Controller('/api/certificate')
 @ApiTags('Certificate')

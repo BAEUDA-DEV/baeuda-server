@@ -8,7 +8,7 @@ import { Certificate } from '@/module/certificate/domain/certificate';
 import {
   CertificateRes,
   CertificateRoundRes,
-} from '@/module/certificate/infra/dto/response';
+} from '@/module/certificate/infra/rest/dto/response';
 
 export interface CertificateRoundType extends PrismaCertificateRound {
   certificate?: PrismaCertificate;

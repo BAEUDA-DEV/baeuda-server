@@ -4,7 +4,7 @@ import { Pagination } from '@/common/domain/pagination';
 import { QuizService } from '@/module/quiz/application/service/quiz.service';
 import { Quiz } from '@/module/quiz/domain/quiz';
 
-import { FindAllCertificateReq } from '@/module/certificate/infra/dto/request';
+import { FindAllCertificateReq } from '@/module/certificate/infra/rest/dto/request';
 
 @Injectable()
 export class QuizFacade {

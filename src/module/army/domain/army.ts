@@ -5,7 +5,7 @@ import {
 
 import { ArmyCertificate } from '@/module/army/domain/amry-certificate';
 
-import { ArmyRes } from '@/module/army/infra/dto/response';
+import { ArmyRes } from '@/module/army/infra/rest/dto/response';
 
 export interface ArmyType extends PrismaArmy {
   armySpecialityCertificates?: PrismaArmyCertificate[];
@@ -17,7 +17,6 @@ interface IArmy {
   updatedAt: Date;
   name: string;
   description: string;
-  // is it nullable? -> only army-speciality data
   armySpecialityCertificates: ArmyCertificate[] | null;
 }
 

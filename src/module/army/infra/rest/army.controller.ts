@@ -4,11 +4,8 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UseAuth } from '@/module/auth/infra/rest/guard/use-auth.decorator';
 import { ArmyFacade } from '@/module/army/application/facade/army.facade';
 import { PaginationRes } from '@/common/dto/pagination.response';
-import {
-  //   ArmyCertificateRes,
-  ArmyRes,
-} from '@/module/army/infra/dto/response';
-import { FindAllArmyReq } from '@/module/army/infra/dto/request';
+import { ArmyRes } from '@/module/army/infra/rest/dto/response';
+import { FindAllArmyReq } from '@/module/army/infra/rest/dto/request';
 
 @Controller('/api/army')
 @ApiTags('Army')
