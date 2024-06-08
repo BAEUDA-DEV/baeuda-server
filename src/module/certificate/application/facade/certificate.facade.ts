@@ -109,7 +109,7 @@ export class CertificateFacade {
         tx,
       );
 
-      const result = await this.certificateUserService
+      return this.certificateUserService
         .create(
           {
             data: {
@@ -128,8 +128,6 @@ export class CertificateFacade {
           tx,
         )
         .then((certificateUser) => CertificateUser.fromPrisma(certificateUser));
-
-      return result;
     });
   }
 }
