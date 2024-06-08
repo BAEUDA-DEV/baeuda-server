@@ -10,6 +10,7 @@ import { CertificateModule } from '@/module/certificate/certificate.module';
 import { CommentModule } from '@/module/comment/comment.module';
 import { QuizModule } from '@/module/quiz/quiz.module';
 import { UserModule } from '@/module/user/user.module';
+import { ArmyModule } from '@/module/army/army.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UserModule } from '@/module/user/user.module';
     CommentModule,
     QuizModule,
     UserModule,
+    ArmyModule,
   ],
 })
 export class AppModule {}

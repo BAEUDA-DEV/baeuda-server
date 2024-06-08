@@ -6,7 +6,7 @@ import {
 
 import { Certificate } from '@/module/certificate/domain/certificate';
 import { Answer } from '@/module/quiz/domain/answer';
-import { QuizRes } from '@/module/quiz/infra/dto/response';
+import { QuizRes } from '@/module/quiz/infra/rest/dto/response';
 
 export interface QuizType extends PrismaQuiz {
   certificate?: PrismaCertificate;

@@ -5,7 +5,7 @@ import {
 } from '@prisma/client';
 
 import { Answer } from '@/module/quiz/domain/answer';
-import { AnswerRes, QuizLogRes } from '@/module/quiz/infra/dto/response';
+import { AnswerRes, QuizLogRes } from '@/module/quiz/infra/rest/dto/response';
 import { User } from '@/module/user/domain/user';
 import { UserRes } from '@/module/user/infra/rest/dto/response';
 

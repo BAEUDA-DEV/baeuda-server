@@ -1,4 +1,4 @@
-import { AnswerRes } from '@/module/quiz/infra/dto/response';
+import { AnswerRes } from '@/module/quiz/infra/rest/dto/response';
 import { Answer as PrismaAnswer } from '@prisma/client';
 
 interface IAnswer {

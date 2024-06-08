@@ -15,8 +15,8 @@ import {
   FindAllQuizLogsReq,
   FindAllQuizReq,
   SaveQuizLogReq,
-} from '@/module/quiz/infra/dto/request';
-import { QuizLogRes, QuizRes } from '@/module/quiz/infra/dto/response';
+} from '@/module/quiz/infra/rest/dto/request';
+import { QuizLogRes, QuizRes } from '@/module/quiz/infra/rest/dto/response';
 
 @Controller('/api/quiz')
 @ApiTags('Quiz')

@@ -11,7 +11,7 @@ import {
   FindAllQuizLogsReq,
   FindAllQuizReq,
   SaveQuizLogReq,
-} from '@/module/quiz/infra/dto/request';
+} from '@/module/quiz/infra/rest/dto/request';
 
 @Injectable()
 export class QuizFacade {
