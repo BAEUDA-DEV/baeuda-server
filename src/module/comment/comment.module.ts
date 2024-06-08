@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 
-import { CommentController } from './infra/rest/comment.controller';
-import { CommentFacade } from './application/facade/comment.facade';
-import { CommentService } from './application/service/comment.service';
+import { CommentController } from '@/module/comment/infra/rest/comment.controller';
+import { CommentService } from '@/module/comment/application/service/comment.service';
+import { CommentFacade } from '@/module/comment/application/facade/comment.facade';
 
 @Module({
   controllers: [CommentController],

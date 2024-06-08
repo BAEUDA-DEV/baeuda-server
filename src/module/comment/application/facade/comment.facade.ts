@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { CommentService } from '@/module/comment/application/service/comment.service';
 
@@ -8,7 +12,6 @@ import { Comment } from '@/module/comment/domain/comment';
 import {
   CommentListReq,
   CreateCommentReq,
-  DeleteCommentReq,
   UpdateCommentReq,
 } from '@/module/comment/infra/rest/dto/request';
 
@@ -55,49 +58,56 @@ export class CommentFacade {
       .then((comment) => Comment.fromPrisma(comment));
   }
 
-  async update(userId: string, req: UpdateCommentReq): Promise<Comment> {
-    if (
-      !(await this.commentService.findOne({
-        where: {
-          writerId: userId,
-          id: req.id,
-        },
-      }))
-    ) {
-      throw new BadRequestException('정상적이지 않은 접근입니다.');
+  async update(
+    userId: string,
+    commentId: string,
+    req: UpdateCommentReq,
+  ): Promise<Comment> {
+    const comment = await this.commentService.findOne({
+      where: {
+        id: commentId,
+      },
+    });
+    if (!comment) {
+      throw new NotFoundException('댓글을 찾을 수 없습니다.');
+    }
+    if (comment?.writerId !== userId) {
+      throw new ForbiddenException('본인의 댓글만 수정할 수 있습니다.');
     }
 
     return this.commentService
       .update({
         where: {
-          id: req.id,
+          id: commentId,
         },
         data: {
           content: req.content,
+        },
+        include: {
+          writer: true,
+          quiz: true,
         },
       })
       .then((comment) => Comment.fromPrisma(comment));
   }
 
-  async delete(userId: string, req: DeleteCommentReq): Promise<Comment> {
-    if (
-      !(await this.commentService.findOne({
-        where: {
-          writerId: userId,
-          id: req.id,
-        },
-        include: {
-          writer: true,
-        },
-      }))
-    ) {
-      throw new BadRequestException('정상적이지 않은 접근입니다.');
+  async delete(userId: string, commentId: string): Promise<Comment> {
+    const comment = await this.commentService.findOne({
+      where: {
+        id: commentId,
+      },
+    });
+    if (!comment) {
+      throw new NotFoundException('댓글을 찾을 수 없습니다.');
+    }
+    if (comment?.writerId !== userId) {
+      throw new ForbiddenException('본인의 댓글만 삭제할 수 있습니다.');
     }
 
     return this.commentService
       .deleteOne({
         where: {
-          id: req.id,
+          id: commentId,
         },
       })
       .then((comment) => Comment.fromPrisma(comment));

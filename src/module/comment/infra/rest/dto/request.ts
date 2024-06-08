@@ -33,19 +33,5 @@ export class CreateCommentReq {
 export class UpdateCommentReq {
   @ApiProperty()
   @IsString()
-  id: string;
-
-  @ApiProperty()
-  @IsString()
   content: string;
-}
-
-export class DeleteCommentReq {
-  @ApiProperty()
-  @IsString()
-  id: string;
-
-  // @ApiProperty()
-  // @IsString()
-  // quizId: string;
 }
