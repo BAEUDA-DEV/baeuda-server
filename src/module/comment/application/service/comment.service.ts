@@ -11,7 +11,7 @@ export class CommentService {
 
   async countAll(
     props: {
-      where?: Prisma.CommentWhereInput
+      where?: Prisma.CommentWhereInput;
     },
     tx: Prisma.TransactionClient = this.prisma,
   ): Promise<number> {
