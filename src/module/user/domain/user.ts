@@ -2,6 +2,8 @@ import { User as PrismaUser } from '@prisma/client';
 
 import { UserRes } from '@/module/user/infra/rest/dto/response';
 
+export interface UserType extends PrismaUser {}
+
 interface IUser {
   id: string;
   createdAt: Date;
@@ -46,7 +48,7 @@ export class User implements IUser {
     );
   }
 
-  public static fromPrisma(props: PrismaUser): User {
+  public static fromPrisma(props: UserType): User {
     return new User(
       props.id,
       props.createdAt,
@@ -64,6 +66,7 @@ export class User implements IUser {
       updatedAt: this.updatedAt,
       name: this.name,
       email: this.email,
+      profileImageUrl: this.profileImageUrl,
     });
   }
 }

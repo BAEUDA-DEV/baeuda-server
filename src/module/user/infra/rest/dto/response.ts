@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 interface IUserRes {
   id: string;
@@ -7,6 +7,7 @@ interface IUserRes {
   updatedAt: Date;
   name: string;
   email: string;
+  profileImageUrl: string | null;
 }
 
 export class UserRes implements IUserRes {
@@ -26,14 +27,19 @@ export class UserRes implements IUserRes {
   updatedAt: Date;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   name: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   email: string;
+
+  @ApiProperty({ type: String, nullable: true })
+  @IsOptional()
+  @IsString()
+  profileImageUrl: string | null;
 
   constructor(
     id: string,
@@ -41,12 +47,14 @@ export class UserRes implements IUserRes {
     updatedAt: Date,
     name: string,
     email: string,
+    profileImageUrl: string | null,
   ) {
     this.id = id;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.name = name;
     this.email = email;
+    this.profileImageUrl = profileImageUrl;
   }
 
   public static from(props: IUserRes): UserRes {
@@ -56,6 +64,7 @@ export class UserRes implements IUserRes {
       props.updatedAt,
       props.name,
       props.email,
+      props.profileImageUrl,
     );
   }
 }

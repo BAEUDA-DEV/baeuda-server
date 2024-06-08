@@ -9,6 +9,7 @@ import {
 } from 'class-validator';
 
 import { CertificateRes } from '@/module/certificate/infra/rest/dto/response';
+import { UserRes } from '@/module/user/infra/rest/dto/response';
 
 interface IQuizRes {
   id: string;
@@ -25,6 +26,14 @@ interface IAnswerRes {
   updatedAt: Date;
   content: string;
   isCorrect: boolean;
+}
+
+interface IQuizLogRes {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  user: UserRes | null;
+  answer: AnswerRes | null;
 }
 
 export class QuizRes implements IQuizRes {
@@ -123,6 +132,52 @@ export class AnswerRes implements IAnswerRes {
       props.updatedAt,
       props.content,
       props.isCorrect,
+    );
+  }
+}
+
+export class QuizLogRes implements IQuizLogRes {
+  @ApiProperty()
+  @IsString()
+  id: string;
+
+  @ApiProperty()
+  @IsDate()
+  createdAt: Date;
+
+  @ApiProperty()
+  @IsDate()
+  updatedAt: Date;
+
+  @ApiProperty({ nullable: true, type: UserRes })
+  @Type(() => UserRes)
+  user: UserRes | null;
+
+  @ApiProperty({ nullable: true, type: AnswerRes })
+  @Type(() => AnswerRes)
+  answer: AnswerRes | null;
+
+  constructor(
+    id: string,
+    createdAt: Date,
+    updatedAt: Date,
+    user: UserRes | null,
+    answer: AnswerRes | null,
+  ) {
+    this.id = id;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.user = user;
+    this.answer = answer;
+  }
+
+  public static from(props: IQuizLogRes): QuizLogRes {
+    return new QuizLogRes(
+      props.id,
+      props.createdAt,
+      props.updatedAt,
+      props.user,
+      props.answer,
     );
   }
 }

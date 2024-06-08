@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { Pagination } from '@/common/domain/pagination';
-
 import { ArmyService } from '@/module/army/application/service/army.service';
 
+import { Pagination } from '@/common/domain/pagination';
 import { Army } from '@/module/army/domain/army';
+
 import { FindAllArmyReq } from '@/module/army/infra/rest/dto/request';
 
 @Injectable()

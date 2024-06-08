@@ -63,11 +63,9 @@ export class Army implements IArmy {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       name: this.name,
-      certificates: this.armySpecialityCertificates
-        ? this.armySpecialityCertificates.map((armyCertificate) =>
-            armyCertificate.toRes(),
-          )
-        : [],
+      certificates: (this.armySpecialityCertificates ?? []).map(
+        (armyCertificate) => armyCertificate.toRes(),
+      ),
     });
   }
 }

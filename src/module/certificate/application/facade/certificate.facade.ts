@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
+import { PrismaService } from '@/common/injectable/prisma.service';
 import { CertificateRoundService } from '@/module/certificate/application/service/certificate-round.service';
 import { CertificateUserService } from '@/module/certificate/application/service/certificate-user.service';
 import { CertificateService } from '@/module/certificate/application/service/certificate.service';
@@ -17,6 +18,7 @@ import {
 @Injectable()
 export class CertificateFacade {
   constructor(
+    private readonly prisma: PrismaService,
     private readonly certificateService: CertificateService,
     private readonly certificateRoundService: CertificateRoundService,
     private readonly certificateUserService: CertificateUserService,
@@ -71,7 +73,11 @@ export class CertificateFacade {
       data: await this.certificateUserService
         .findAll({
           where: { userId },
-          include: { certificateRound: true, user: true },
+          include: {
+            user: true,
+            certificateRound: { include: { certificate: true } },
+          },
+          orderBy: { createdAt: 'desc' },
         })
         .then((certificateUsers) =>
           certificateUsers.map((certificateUser) =>
@@ -94,21 +100,36 @@ export class CertificateFacade {
       throw new BadRequestException('등록되어 있는 자격증입니다.');
     }
 
-    return this.certificateUserService
-      .create({
-        data: {
-          user: {
-            connect: { id: userId },
-          },
-          certificateRound: {
-            connect: { id: certificateRoundId },
-          },
+    return this.prisma.$transaction(async (tx) => {
+      await this.certificateRoundService.update(
+        {
+          data: { userCount: { increment: 1 } },
+          where: { id: certificateRoundId },
         },
-        include: {
-          user: true,
-          certificateRound: true,
-        },
-      })
-      .then((certificateUser) => CertificateUser.fromPrisma(certificateUser));
+        tx,
+      );
+
+      const result = await this.certificateUserService
+        .create(
+          {
+            data: {
+              user: {
+                connect: { id: userId },
+              },
+              certificateRound: {
+                connect: { id: certificateRoundId },
+              },
+            },
+            include: {
+              user: true,
+              certificateRound: { include: { certificate: true } },
+            },
+          },
+          tx,
+        )
+        .then((certificateUser) => CertificateUser.fromPrisma(certificateUser));
+
+      return result;
+    });
   }
 }

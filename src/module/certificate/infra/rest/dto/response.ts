@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-
-import { UserRes } from '@/module/user/infra/rest/dto/response';
+import dayjs from 'dayjs';
 
 interface ICertificateRes {
   id: string;
@@ -23,6 +22,7 @@ interface ICertificateRoundRes {
   testStart: Date;
   testEnd: Date;
   resultAnnouncement: Date;
+  userCount: number;
 }
 
 interface ICertificateUserRes {
@@ -30,7 +30,6 @@ interface ICertificateUserRes {
   createdAt: Date;
   updatedAt: Date;
   certificateRound: CertificateRoundRes | null;
-  user: UserRes | null;
 }
 
 export class CertificateRes implements ICertificateRes {
@@ -83,8 +82,8 @@ export class CertificateRoundRes implements ICertificateRoundRes {
   @IsDate()
   updatedAt: Date;
 
-  @ApiProperty({ nullable: true })
-  @Type(() => CertificateRoundRes)
+  @ApiProperty({ type: CertificateRes, nullable: true })
+  @Type(() => CertificateRes)
   certificate: CertificateRes | null;
 
   @ApiProperty()
@@ -115,6 +114,14 @@ export class CertificateRoundRes implements ICertificateRoundRes {
   @IsDate()
   resultAnnouncement: Date;
 
+  @ApiProperty()
+  @IsNumber()
+  userCount: number;
+
+  @ApiProperty()
+  @IsNumber()
+  remainDay: number;
+
   constructor(
     id: string,
     createdAt: Date,
@@ -127,6 +134,7 @@ export class CertificateRoundRes implements ICertificateRoundRes {
     testStart: Date,
     testEnd: Date,
     resultAnnouncement: Date,
+    userCount: number,
   ) {
     this.id = id;
     this.createdAt = createdAt;
@@ -139,6 +147,8 @@ export class CertificateRoundRes implements ICertificateRoundRes {
     this.testStart = testStart;
     this.testEnd = testEnd;
     this.resultAnnouncement = resultAnnouncement;
+    this.userCount = userCount;
+    this.remainDay = dayjs(testStart).diff(new Date(), 'd');
   }
 
   public static from(props: ICertificateRoundRes): CertificateRoundRes {
@@ -154,6 +164,7 @@ export class CertificateRoundRes implements ICertificateRoundRes {
       props.testStart,
       props.testEnd,
       props.resultAnnouncement,
+      props.userCount,
     );
   }
 }
@@ -172,26 +183,20 @@ export class CertificateUserRes implements ICertificateUserRes {
   @IsDate()
   updatedAt: Date;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ type: CertificateRoundRes, nullable: true })
   @Type(() => CertificateRoundRes)
   certificateRound: CertificateRoundRes | null;
-
-  @ApiProperty({ nullable: true })
-  @Type(() => UserRes)
-  user: UserRes | null;
 
   constructor(
     id: string,
     createdAt: Date,
     updatedAt: Date,
     certificateRound: CertificateRoundRes | null,
-    user: UserRes | null,
   ) {
     this.id = id;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.certificateRound = certificateRound;
-    this.user = user;
   }
 
   public static from(props: ICertificateUserRes): CertificateUserRes {
@@ -200,7 +205,6 @@ export class CertificateUserRes implements ICertificateUserRes {
       props.createdAt,
       props.updatedAt,
       props.certificateRound,
-      props.user,
     );
   }
 }

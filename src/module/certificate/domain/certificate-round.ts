@@ -27,6 +27,7 @@ interface ICertificateRound {
   testStart: Date;
   testEnd: Date;
   resultAnnouncement: Date;
+  userCount: number;
 }
 
 export class CertificateRound implements ICertificateRound {
@@ -42,6 +43,7 @@ export class CertificateRound implements ICertificateRound {
   testStart: Date;
   testEnd: Date;
   resultAnnouncement: Date;
+  userCount: number;
 
   constructor(
     id: string,
@@ -56,6 +58,7 @@ export class CertificateRound implements ICertificateRound {
     testStart: Date,
     testEnd: Date,
     resultAnnouncement: Date,
+    userCount: number,
   ) {
     this.id = id;
     this.createdAt = createdAt;
@@ -69,6 +72,7 @@ export class CertificateRound implements ICertificateRound {
     this.testStart = testStart;
     this.testEnd = testEnd;
     this.resultAnnouncement = resultAnnouncement;
+    this.userCount = userCount;
   }
 
   public static fromPrisma(props: CertificateRoundType): CertificateRound {
@@ -85,6 +89,7 @@ export class CertificateRound implements ICertificateRound {
       props.testStart,
       props.testEnd,
       props.resultAnnouncement,
+      props.userCount,
     );
   }
 
@@ -103,6 +108,7 @@ export class CertificateRound implements ICertificateRound {
       testStart: this.testStart,
       testEnd: this.testEnd,
       resultAnnouncement: this.resultAnnouncement,
+      userCount: this.userCount,
     });
   }
 }

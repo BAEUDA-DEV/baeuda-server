@@ -1,9 +1,12 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { UseAuth } from '@/module/auth/infra/rest/guard/use-auth.decorator';
 import { ArmyFacade } from '@/module/army/application/facade/army.facade';
-import { PaginationRes } from '@/common/dto/pagination.response';
+import {
+  ApiPaginationResponse,
+  PaginationRes,
+} from '@/common/dto/pagination.response';
 import { ArmyRes } from '@/module/army/infra/rest/dto/response';
 import { FindAllArmyReq } from '@/module/army/infra/rest/dto/request';
 
@@ -15,7 +18,7 @@ export class ArmyController {
 
   @Get('/list')
   @ApiOperation({ summary: '특기병 목록 조회' })
-  @ApiResponse({ type: PaginationRes<ArmyRes> })
+  @ApiPaginationResponse(ArmyRes)
   async findAll(
     @Query() req: FindAllArmyReq,
   ): Promise<PaginationRes<ArmyRes[]>> {
