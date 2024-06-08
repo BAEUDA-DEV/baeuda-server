@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { UseAuth } from '@/module/auth/infra/rest/guard/use-auth.decorator';
@@ -16,7 +25,6 @@ import { CommentRes } from '@/module/comment/infra/rest/dto/response';
 import {
   CommentListReq,
   CreateCommentReq,
-  DeleteCommentReq,
   UpdateCommentReq,
 } from '@/module/comment/infra/rest/dto/request';
 
@@ -49,23 +57,28 @@ export class CommentController {
     return this.commentFacade.create(userId, req).then((it) => it.toRes());
   }
 
-  @Post('/update')
+  @Patch('/:commentId')
   @ApiOperation({ summary: '댓글 수정' })
   @ApiResponse({ type: CommentRes })
   async update(
     @AuthUser() { userId }: AuthUserType,
+    @Param('commentId') commentId: string,
     @Body() req: UpdateCommentReq,
   ): Promise<CommentRes> {
-    return this.commentFacade.update(userId, req).then((it) => it.toRes());
+    return this.commentFacade
+      .update(userId, commentId, req)
+      .then((it) => it.toRes());
   }
 
-  @Post('/delete')
+  @Delete('/:commentId')
   @ApiOperation({ summary: '댓글 삭제' })
   @ApiResponse({ type: CommentRes })
   async delete(
     @AuthUser() { userId }: AuthUserType,
-    @Body() req: DeleteCommentReq,
+    @Param('commentId') commentId: string,
   ): Promise<CommentRes> {
-    return this.commentFacade.delete(userId, req).then((it) => it.toRes());
+    return this.commentFacade
+      .delete(userId, commentId)
+      .then((it) => it.toRes());
   }
 }

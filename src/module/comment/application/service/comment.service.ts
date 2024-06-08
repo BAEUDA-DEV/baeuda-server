@@ -52,11 +52,9 @@ export class CommentService {
 
   async update(
     props: {
+      data: Pick<Prisma.CommentUpdateInput, 'content'>;
       where: Prisma.CommentWhereUniqueInput;
-      data: Omit<
-        Prisma.CommentUpdateInput,
-        'id' | 'createAt' | 'UpdateAt' | 'writer' | 'quiz'
-      >;
+      include?: Prisma.CommentInclude;
     },
     tx: Prisma.TransactionClient = this.prisma,
   ): Promise<CommentType> {
