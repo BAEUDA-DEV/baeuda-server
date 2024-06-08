@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-import { QuizRes } from '@/module/quiz/infra/dto/response';
+import { QuizRes } from '@/module/quiz/infra/rest/dto/response';
 import { UserRes } from '@/module/user/infra/rest/dto/response';
 
 interface ICommentRes {
