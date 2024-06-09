@@ -28,4 +28,14 @@ export class QuizService {
   ): Promise<QuizType[]> {
     return tx.quiz.findMany(props);
   }
+
+  async findOne(
+    props: {
+      where?: Prisma.QuizWhereUniqueInput;
+      include?: Prisma.QuizInclude;
+    },
+    tx: Prisma.TransactionClient = this.prisma,
+  ): Promise<QuizType | null> {
+    return tx.quiz.findFirst(props);
+  }
 }

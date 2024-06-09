@@ -28,12 +28,12 @@ export class CommentRes implements ICommentRes {
   @IsDate()
   updatedAt: Date;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true, type: UserRes })
   @Type(() => UserRes)
   @IsOptional()
   writer: UserRes | null;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true, type: QuizRes })
   @Type(() => QuizRes)
   @IsOptional()
   quiz: QuizRes | null;

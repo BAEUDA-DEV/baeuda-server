@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuthUserType } from '@/module/auth/infra/rest/guard';
 import { AuthUser } from '@/module/auth/infra/rest/guard/auth-user.decorator';
@@ -33,6 +33,14 @@ export class QuizController {
       .then((it) =>
         it.toRes<QuizRes[]>((data) => data.map((child) => child.toRes())),
       );
+  }
+
+  @Get('/:quizId')
+  @ApiOperation({ summary: '퀴즈 조회' })
+  @ApiParam({ name: 'quizId', type: String })
+  @ApiResponse({ type: QuizRes })
+  async one(@Param('quizId') quizId: string): Promise<QuizRes> {
+    return this.quizFacade.findOne(quizId).then((it) => it.toRes());
   }
 
   @Get('/log')
