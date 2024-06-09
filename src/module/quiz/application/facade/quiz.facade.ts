@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { Pagination } from '@/common/domain/pagination';
 import { Quiz } from '@/module/quiz/domain/quiz';
@@ -39,6 +39,18 @@ export class QuizFacade {
         })
         .then((quizList) => quizList.map((quiz) => Quiz.fromPrisma(quiz))),
     });
+  }
+
+  async findOne(quizId: string): Promise<Quiz> {
+    const quiz = await this.quizService.findOne({
+      where: { id: quizId },
+      include: { certificate: true, answers: true },
+    });
+    if (!quiz) {
+      throw new NotFoundException('퀴즈를 찾을 수 없습니다.');
+    }
+
+    return Quiz.fromPrisma(quiz);
   }
 
   async findAllLogs(
