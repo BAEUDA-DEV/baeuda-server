@@ -31,6 +31,7 @@ export class CommentFacade {
         .findAll({
           where: { quizId: req.quizId },
           include: { writer: true, quiz: true },
+          orderBy: { createdAt: 'desc' },
           skip: req.skip,
           take: req.take,
         })
