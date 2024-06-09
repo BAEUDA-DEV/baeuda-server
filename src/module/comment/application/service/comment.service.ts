@@ -32,6 +32,9 @@ export class CommentService {
     props: {
       where?: Prisma.CommentWhereInput;
       include?: Prisma.CommentInclude;
+      orderBy?:
+        | Prisma.CommentOrderByWithRelationInput
+        | Prisma.CommentOrderByWithRelationInput[];
       skip?: number;
       take?: number;
     },
