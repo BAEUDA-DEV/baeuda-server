@@ -82,7 +82,7 @@ export class CertificateRoundRes implements ICertificateRoundRes {
   @IsDate()
   updatedAt: Date;
 
-  @ApiProperty({ type: CertificateRes, nullable: true })
+  @ApiProperty({ nullable: true, type: CertificateRes })
   @Type(() => CertificateRes)
   certificate: CertificateRes | null;
 
@@ -183,7 +183,7 @@ export class CertificateUserRes implements ICertificateUserRes {
   @IsDate()
   updatedAt: Date;
 
-  @ApiProperty({ type: CertificateRoundRes, nullable: true })
+  @ApiProperty({ nullable: true, type: CertificateRoundRes })
   @Type(() => CertificateRoundRes)
   certificateRound: CertificateRoundRes | null;
 
