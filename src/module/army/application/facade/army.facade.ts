@@ -22,6 +22,9 @@ export class ArmyFacade {
       data: await this.armyService
         .findAll({
           where: { name: { contains: req?.query?.trim() ?? '' } },
+          include: {
+            armySpecialityCertificates: { include: { certificate: true } },
+          },
           skip: req.skip,
           take: req.take,
         })
