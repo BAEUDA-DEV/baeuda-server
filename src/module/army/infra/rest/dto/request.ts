@@ -20,3 +20,22 @@ export class FindAllArmyReq {
   @Min(1)
   take: number;
 }
+
+export class FindAllArmyCertificateReq {
+  @ApiProperty({ nullable: true, required: false })
+  @IsOptional()
+  @IsString()
+  query?: string;
+
+  @ApiProperty({ type: Number, default: 0 })
+  @IsNumber()
+  @Type(() => Number)
+  @Min(0)
+  skip: number;
+
+  @ApiProperty({ default: 10 })
+  @IsNumber()
+  @Type(() => Number)
+  @Min(1)
+  take: number;
+}

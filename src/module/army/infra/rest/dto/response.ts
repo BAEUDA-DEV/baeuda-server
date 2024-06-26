@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  IsArray,
   IsDate,
   IsNotEmpty,
   IsString,
-  IsArray,
   ValidateNested,
 } from 'class-validator';
 
@@ -15,13 +15,14 @@ interface IArmyRes {
   createdAt: Date;
   updatedAt: Date;
   name: string;
-  certificates: ArmyCertificateRes[] | null;
+  certificates: CertificateRes[] | null;
 }
 
 interface IArmyCertificateRes {
   id: string;
   createdAt: Date;
   updatedAt: Date;
+  armySpeciality: ArmyRes | null;
   certificate: CertificateRes | null;
 }
 
@@ -44,18 +45,18 @@ export class ArmyRes implements IArmyRes {
   @IsString()
   name: string;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ type: [CertificateRes], nullable: true })
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => ArmyCertificateRes)
-  certificates: ArmyCertificateRes[] | null;
+  @Type(() => CertificateRes)
+  certificates: CertificateRes[] | null;
 
   constructor(
     id: string,
     createdAt: Date,
     updatedAt: Date,
     name: string,
-    certificates: ArmyCertificateRes[] | null,
+    certificates: CertificateRes[] | null,
   ) {
     this.id = id;
     this.createdAt = createdAt;
@@ -89,6 +90,9 @@ export class ArmyCertificateRes implements IArmyCertificateRes {
   @IsDate()
   updatedAt: Date;
 
+  @ApiProperty({ type: ArmyRes, nullable: true })
+  armySpeciality: ArmyRes | null;
+
   @ApiProperty({ type: CertificateRes, nullable: true })
   certificate: CertificateRes | null;
 
@@ -96,11 +100,13 @@ export class ArmyCertificateRes implements IArmyCertificateRes {
     id: string,
     createdAt: Date,
     updateAt: Date,
+    armySpeciality: ArmyRes | null,
     certificate: CertificateRes | null,
   ) {
     this.id = id;
     this.createdAt = createdAt;
     this.updatedAt = updateAt;
+    this.armySpeciality = armySpeciality;
     this.certificate = certificate;
   }
 
@@ -109,6 +115,7 @@ export class ArmyCertificateRes implements IArmyCertificateRes {
       props.id,
       props.createdAt,
       props.updatedAt,
+      props.armySpeciality,
       props.certificate,
     );
   }
