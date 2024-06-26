@@ -1,14 +1,14 @@
-import {
-  ArmySpeciality as PrismaArmy,
-  ArmySpecialityCertificate as PrismaArmyCertificate,
-} from '@prisma/client';
+import { ArmySpeciality as PrismaArmy } from '@prisma/client';
 
-import { ArmyCertificate } from '@/module/army/domain/amry-certificate';
+import {
+  ArmyCertificate,
+  ArmyCertificateType,
+} from '@/module/army/domain/amry-certificate';
 
 import { ArmyRes } from '@/module/army/infra/rest/dto/response';
 
 export interface ArmyType extends PrismaArmy {
-  armySpecialityCertificates?: PrismaArmyCertificate[];
+  armySpecialityCertificates?: ArmyCertificateType[];
 }
 
 interface IArmy {
@@ -63,9 +63,10 @@ export class Army implements IArmy {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       name: this.name,
-      certificates: this.armySpecialityCertificates.map((armyCertificate) =>
-        armyCertificate.toRes(),
-      ),
+      certificates: (this.armySpecialityCertificates ?? [])
+        .map((armyCertificate) => armyCertificate.certificate)
+        .filter((certificate) => !!certificate)
+        .map((certificate) => certificate.toRes()),
     });
   }
 }

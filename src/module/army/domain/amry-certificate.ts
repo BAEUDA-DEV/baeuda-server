@@ -1,11 +1,11 @@
 import { ArmySpecialityCertificate as PrismaArmyCertificate } from '@prisma/client';
 
+import { Army, ArmyType } from '@/module/army/domain/army';
+import { ArmyCertificateRes } from '@/module/army/infra/rest/dto/response';
 import {
   Certificate,
   CertificateType,
 } from '@/module/certificate/domain/certificate';
-import { Army, ArmyType } from '@/module/army/domain/army';
-import { ArmyCertificateRes } from '@/module/army/infra/rest/dto/response';
 
 export interface ArmyCertificateType extends PrismaArmyCertificate {
   armySpeciality?: ArmyType;
@@ -66,6 +66,7 @@ export class ArmyCertificate implements IArmyCertificate {
       id: this.id,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      armySpeciality: this.armySpeciality?.toRes() ?? null,
       certificate: this.certificate?.toRes() ?? null,
     });
   }

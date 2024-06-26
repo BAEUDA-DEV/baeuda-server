@@ -1,14 +1,17 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { UseAuth } from '@/module/auth/infra/rest/guard/use-auth.decorator';
-import { ArmyFacade } from '@/module/army/application/facade/army.facade';
 import {
   ApiPaginationResponse,
   PaginationRes,
 } from '@/common/dto/pagination.response';
+import { ArmyFacade } from '@/module/army/application/facade/army.facade';
+import {
+  FindAllArmyCertificateReq,
+  FindAllArmyReq,
+} from '@/module/army/infra/rest/dto/request';
 import { ArmyRes } from '@/module/army/infra/rest/dto/response';
-import { FindAllArmyReq } from '@/module/army/infra/rest/dto/request';
+import { UseAuth } from '@/module/auth/infra/rest/guard/use-auth.decorator';
 
 @Controller('/api/army')
 @ApiTags('Army')
@@ -27,5 +30,17 @@ export class ArmyController {
       .then((it) =>
         it.toRes<ArmyRes[]>((data) => data.map((child) => child.toRes())),
       );
+  }
+
+  @Get('/list/certificate/:certificateId')
+  @ApiOperation({ summary: '자격증별 특기병 목록 조회' })
+  @ApiPaginationResponse(ArmyRes)
+  async findByCertificateId(
+    @Param('certificateId') certificateId: string,
+    @Query() req: FindAllArmyCertificateReq,
+  ): Promise<PaginationRes<ArmyRes[]>> {
+    return this.armyFacade
+      .findByCertificateId(certificateId, req)
+      .then((it) => it.toRes((data) => data.map((child) => child.toRes())));
   }
 }
