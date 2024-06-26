@@ -7,6 +7,7 @@ import { configModuleOptions } from '@/options/config.option';
 import { CommonModule } from '@/common/common.module';
 import { AuthModule } from '@/module/auth/auth.module';
 import { CertificateModule } from '@/module/certificate/certificate.module';
+import { CommentModule } from '@/module/comment/comment.module';
 import { QuizModule } from '@/module/quiz/quiz.module';
 import { UserModule } from '@/module/user/user.module';
 import { ArmyModule } from '@/module/army/army.module';
@@ -19,6 +20,7 @@ import { ArmyModule } from '@/module/army/army.module';
     CommonModule,
     AuthModule,
     CertificateModule,
+    CommentModule,
     QuizModule,
     UserModule,
     ArmyModule,

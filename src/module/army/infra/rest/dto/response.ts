@@ -1,122 +1,72 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { ArmySpeciality as PrismaArmy } from '@prisma/client';
+
 import {
-  IsArray,
-  IsDate,
-  IsNotEmpty,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+  ArmyCertificate,
+  ArmyCertificateType,
+} from '@/module/army/domain/amry-certificate';
 
-import { CertificateRes } from '@/module/certificate/infra/rest/dto/response';
+import { ArmyRes } from '@/module/army/infra/rest/dto/response';
 
-interface IArmyRes {
+export interface ArmyType extends PrismaArmy {
+  armySpecialityCertificates?: ArmyCertificateType[];
+}
+
+interface IArmy {
   id: string;
   createdAt: Date;
   updatedAt: Date;
   name: string;
-  certificates: CertificateRes[] | null;
+  description: string;
+  armySpecialityCertificates: ArmyCertificate[];
 }
 
-interface IArmyCertificateRes {
+export class Army implements IArmy {
   id: string;
   createdAt: Date;
   updatedAt: Date;
-  armySpeciality: ArmyRes | null;
-  certificate: CertificateRes | null;
-}
-
-export class ArmyRes implements IArmyRes {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  id: string;
-
-  @ApiProperty()
-  @IsDate()
-  createdAt: Date;
-
-  @ApiProperty()
-  @IsDate()
-  updatedAt: Date;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
   name: string;
-
-  @ApiProperty({ type: [CertificateRes], nullable: true })
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CertificateRes)
-  certificates: CertificateRes[] | null;
-
-  constructor(
-    id: string,
-    createdAt: Date,
-    updatedAt: Date,
-    name: string,
-    certificates: CertificateRes[] | null,
-  ) {
-    this.id = id;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    this.name = name;
-    this.certificates = certificates;
-  }
-
-  static from(props: IArmyRes): ArmyRes {
-    return new ArmyRes(
-      props.id,
-      props.createdAt,
-      props.updatedAt,
-      props.name,
-      props.certificates,
-    );
-  }
-}
-
-export class ArmyCertificateRes implements IArmyCertificateRes {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  id: string;
-
-  @ApiProperty()
-  @IsDate()
-  createdAt: Date;
-
-  @ApiProperty()
-  @IsDate()
-  updatedAt: Date;
-
-  @ApiProperty({ type: ArmyRes, nullable: true })
-  armySpeciality: ArmyRes | null;
-
-  @ApiProperty({ type: CertificateRes, nullable: true })
-  certificate: CertificateRes | null;
+  description: string;
+  armySpecialityCertificates: ArmyCertificate[];
 
   constructor(
     id: string,
     createdAt: Date,
     updateAt: Date,
-    armySpeciality: ArmyRes | null,
-    certificate: CertificateRes | null,
+    name: string,
+    description: string,
+    armySpecialityCertificates: ArmyCertificate[],
   ) {
     this.id = id;
     this.createdAt = createdAt;
     this.updatedAt = updateAt;
-    this.armySpeciality = armySpeciality;
-    this.certificate = certificate;
+    this.name = name;
+    this.description = description;
+    this.armySpecialityCertificates = armySpecialityCertificates;
   }
 
-  public static from(props: IArmyCertificateRes): ArmyCertificateRes {
-    return new ArmyCertificateRes(
+  public static fromPrisma(props: ArmyType): Army {
+    return new Army(
       props.id,
       props.createdAt,
       props.updatedAt,
-      props.armySpeciality,
-      props.certificate,
+      props.name,
+      props.description,
+      (props?.armySpecialityCertificates ?? []).map((armyCertificate) =>
+        ArmyCertificate.fromPrisma(armyCertificate),
+      ),
     );
+  }
+
+  public toRes(): ArmyRes {
+    return ArmyRes.from({
+      id: this.id,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      name: this.name,
+      certificates: (this.armySpecialityCertificates ?? [])
+        .map((armyCertificate) => armyCertificate.certificate)
+        .filter((certificate) => !!certificate)
+        .map((certificate) => certificate.toRes()),
+    });
   }
 }

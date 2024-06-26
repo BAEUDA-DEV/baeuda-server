@@ -17,7 +17,7 @@ interface IArmy {
   updatedAt: Date;
   name: string;
   description: string;
-  armySpecialityCertificates: ArmyCertificate[] | null;
+  armySpecialityCertificates: ArmyCertificate[];
 }
 
 export class Army implements IArmy {
@@ -26,7 +26,7 @@ export class Army implements IArmy {
   updatedAt: Date;
   name: string;
   description: string;
-  armySpecialityCertificates: ArmyCertificate[] | null;
+  armySpecialityCertificates: ArmyCertificate[];
 
   constructor(
     id: string,
@@ -34,7 +34,7 @@ export class Army implements IArmy {
     updateAt: Date,
     name: string,
     description: string,
-    armySpecialityCertificates: ArmyCertificate[] | null,
+    armySpecialityCertificates: ArmyCertificate[],
   ) {
     this.id = id;
     this.createdAt = createdAt;
@@ -51,7 +51,7 @@ export class Army implements IArmy {
       props.updatedAt,
       props.name,
       props.description,
-      (props.armySpecialityCertificates ?? []).map((armyCertificate) =>
+      (props?.armySpecialityCertificates ?? []).map((armyCertificate) =>
         ArmyCertificate.fromPrisma(armyCertificate),
       ),
     );
